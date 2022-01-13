@@ -1,0 +1,13 @@
+Package: Sporm
+Type: Package
+Title: Statistical analysis under the Semi-Parametric Odds Ratio Model
+Version: 0.0.0.9000
+Author: Hua Yun Chen
+Maintainer: Hua Yun Chen <hychen@uic.edu>
+Description: This package implements multivariate analysis and variable selection for 
+    multivariate data based on various likelihood approach.
+Depends: R (>= 3.5.0)
+License: GPL-2 | GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
