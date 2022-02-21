@@ -7,15 +7,15 @@
 sppenlkh(dat, group, lambda, niter = 50, eps = 1e-06)
 }
 \arguments{
-\item{dat}{a data matrix of nxnode dimension,}
+\item{dat}{a data matrix of nxnode dimension}
 
 \item{group}{a vector of positive integers of length ng
-such that sum(group)=node.}
+such that sum(group)=node}
 
 \item{lambda}{a vector of penalty values for network selection,
-each penalty value determine a network.}
+each penalty value determine a network}
 
-\item{niter}{maximum number of iterations in finding the estimator.}
+\item{niter}{maximum number of iterations in finding the estimator}
 
 \item{eps}{convergence criterion: discrepancy between successive
 iterations for terminal the iteration}

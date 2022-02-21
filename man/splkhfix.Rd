@@ -7,20 +7,20 @@
 splkhfix(y, x, fixstruct, niter = 50, eps = 1e-06, vect = "col")
 }
 \arguments{
-\item{y}{outcomes: a matrix of nxq dimension,}
+\item{y}{outcomes: a matrix of nxq dimension}
 
-\item{x}{covariates: a matrix of nxp dimension.}
+\item{x}{covariates: a matrix of nxp dimension}
 
 \item{fixstruct}{a pxq matrix specifying location of fixed parameter (0),
-or parameter to be estimated (1).}
+or parameter to be estimated (1)}
 
-\item{niter}{the maximum number of iterations in finding the estimator.}
+\item{niter}{the maximum number of iterations in finding the estimator}
 
 \item{eps}{convergence criterion: discrepancy between successive
 iterations for terminal the iteration}
 
 \item{vect}{methods of vectorization of parameter matrix.
-Either column-wise (vect='col') or row-wise (vect='row').}
+Either column-wise (vect='col') or row-wise (vect='row')}
 }
 \value{
 Estimate of the model parameters (vectorized),

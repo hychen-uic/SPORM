@@ -3,7 +3,7 @@
 #'
 #' This approach selects the network using the BIC.
 #'
-#' @param dat a data matrix of n*node dimension
+#' @param dat a data matrix of nxnode dimension
 #' @param group a vector of positive integers of length ng such that sum(group) = node
 #' @param lambda a vector of penalty values for network selection, each penalty value determines a network
 #' @param network a set of networks determined by one of the penalized approaches

@@ -14,15 +14,15 @@
 #' to estimating the parameters in the semiparametric odds ratio model
 #' accommodating the pre-specified fixed structure in parameters.
 #'
-#' @param y outcomes: a matrix of nxq dimension,
-#' @param x covariates: a matrix of nxp dimension.
+#' @param y outcomes: a matrix of nxq dimension
+#' @param x covariates: a matrix of nxp dimension
 #' @param fixstruct a pxq matrix specifying location of fixed parameter (0),
-#'                   or parameter to be estimated (1).
-#' @param niter maximum number of iterations in finding the estimator.
+#'                   or parameter to be estimated (1)
+#' @param niter maximum number of iterations in finding the estimator
 #' @param eps convergence criterion: discrepancy between successive
 #'            iterations for terminal the iteration
 #' @param vect methods of vectorization of parameter matrix.
-#'        Either column-wise (vect='col') or row-wise (vect='row').
+#'        Either column-wise (vect='col') or row-wise (vect='row')
 #'
 #' @details This method maximizes the pairwise likelihood to obtain the parameter estimator
 #'          and uses U-statistic theory to estimate the asymptotic variance of the estimator.

@@ -18,7 +18,7 @@ pmlkhfix(
 )
 }
 \arguments{
-\item{dat}{a data matrix of n*p dimension}
+\item{dat}{a data matrix of nxp dimension}
 
 \item{group}{a vector of positive integers of length ng
 such that sum(group) = p}

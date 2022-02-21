@@ -8,7 +8,7 @@ the penalized likelihood approaches}
 networkselect(dat, group, lambda, network, method, criterion)
 }
 \arguments{
-\item{dat}{a data matrix of n*node dimension}
+\item{dat}{a data matrix of nxnode dimension}
 
 \item{group}{a vector of positive integers of length ng such that sum(group) = node}
 

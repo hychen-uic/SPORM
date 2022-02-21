@@ -8,9 +8,9 @@
 #' This approach uses the maximum pairwise pseudo-likelihood approach to estimating
 #' the parameters in the semiparametric odds ratio model.
 #'
-#' @param y outcomes: can be a vector of length n or a matrix of nxq dimension,
-#' @param x covariates: a matrix of nxp dimension.
-#' @param niter maximum number of iterations in finding the estimator.
+#' @param y outcomes: can be a vector of length n or a matrix of nxq dimension
+#' @param x covariates: a matrix of nxp dimension
+#' @param niter maximum number of iterations in finding the estimator
 #' @param eps convergence criterion: discrepancy between successive
 #'            iterations for terminal the iteration
 #' @param vect methods of vectorization of parameter matrix.

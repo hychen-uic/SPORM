@@ -11,12 +11,12 @@
 #'    using the penalized semiparametric likelihood approach.
 #'    The network selection is the node-wise approach.
 #'
-#' @param dat a data matrix of nxnode dimension,
+#' @param dat a data matrix of nxnode dimension
 #' @param group a vector of positive integers of length ng
-#'        such that sum(group)=node.
+#'        such that sum(group)=node
 #' @param lambda a vector of penalty values for network selection,
-#'               each penalty value determine a network.
-#' @param niter maximum number of iterations in finding the estimator.
+#'               each penalty value determine a network
+#' @param niter maximum number of iterations in finding the estimator
 #' @param eps convergence criterion: discrepancy between successive
 #'            iterations for terminal the iteration
 #'

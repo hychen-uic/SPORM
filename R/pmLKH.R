@@ -15,12 +15,12 @@
 #' @param niter the maximum number of iterations
 #' @param eps convergence criterion: discrepancy between successive
 #'            iterations for terminal the iteration.
-#' @param nlag the averaged parameter values in the sequence to assess convergence, default nlag=20.
-#' @param nburnin the burnin steps before a sample is taken. default nburnin=5e4.
-#' @param nsamp the sample sizes to be taken in the MCMC sampling of permutation. default nsamp=1e4.
-#' @param nintv the sampling interval (number of steps ignored) in the MCMC chain. default nintv=2e2.
+#' @param nlag the averaged parameter values in the sequence to assess convergence, default nlag=20
+#' @param nburnin the burnin steps before a sample is taken. default nburnin=5e4
+#' @param nsamp the sample sizes to be taken in the MCMC sampling of permutation. default nsamp=1e4
+#' @param nintv the sampling interval (number of steps ignored) in the MCMC chain. default nintv=2e2
 #' @param maxcyc the maximum step size (cycle of the permutation) in obtaining a candidate permutation
-#'        (change from the previous one) in the Gibbs sampling. default maxcyc=2.
+#'        (change from the previous one) in the Gibbs sampling. default maxcyc=2
 #'
 #' @details This method maximizes the permutation likelihood to obtain the parameter estimator
 #'          and uses the inverse of the permutation likelihood information matrix to estimate

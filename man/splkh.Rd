@@ -7,17 +7,17 @@
 splkh(y, x, niter = 50, eps = 1e-06, vect = "col")
 }
 \arguments{
-\item{y}{outcomes: can be a vector of length n or a matrix of nxq dimension,}
+\item{y}{outcomes: can be a vector of length n or a matrix of nxq dimension}
 
-\item{x}{covariates: a matrix of nxp dimension.}
+\item{x}{covariates: a matrix of nxp dimension}
 
-\item{niter}{maximum number of iterations in finding the estimator.}
+\item{niter}{maximum number of iterations in finding the estimator}
 
 \item{eps}{convergence criterion: discrepancy between successive
 iterations for terminal the iteration}
 
 \item{vect}{methods of vectorization of parameter matrix.
-Either column-wise (vect='col') or row-wise (vect='row').}
+Either column-wise (vect='col') or row-wise (vect='row')}
 }
 \value{
 Estimate of the model parameters (vectorized) and

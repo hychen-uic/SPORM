@@ -14,7 +14,7 @@
 #' to estimating the parameters in the semiparametric odds ratio model
 #' accommodating the pre-specified fixed structure in parameters.
 #'
-#' @param dat a data matrix of n*p dimension
+#' @param dat a data matrix of nxp dimension
 #' @param group a vector of positive integers of length ng
 #'        such that sum(group) = p
 #' @param fixstruct a p*q matrix specifying location of fixed parameter (0),
