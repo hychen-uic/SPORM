@@ -1,6 +1,17 @@
 #' @importFrom graphics lines
 NULL
-# for internal use
+
+#' This function is used for diagnostic of convergence
+#'
+#' This function is used to draw the progression of the parameter estimates
+#' in the iterations of the permutation likelihood approach to monitor the convergence
+#' of the parameter estimates.
+#'
+#' @param x input argument
+#'
+#' @export
+#'
+#----------------------
 draw <- function(x){
   n <- dim(x)[1]
   p <- dim(x)[2]
