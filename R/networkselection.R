@@ -1,38 +1,26 @@
-#' Network selection
+#' The network selection from a set of selected networks using output from one of
+#' the penalized likelihood approaches
 #'
-#' This function selects one network among a set of networks using a specified criterion based on a particular
-#' fitting approach.
+#' This approach selects the network using the BIC.
 #'
-#' @param dat the whole data matrix.
-#' @param group a vector indicating the sizes of the variables in each group the data matrix divides.
-#' @param lambda a vector of penalty parameters. A network is selected for each lambda value.
-#' @param network a set of networks correspond to lambda vector.
-#' @param method the method used to fit the network model, choices include: "pw" for pairwise pseudo-likelihood
-#' approach, "pm" for permutation likelihood approach, and "sp" for semiparametric likelihood approach.
-#' @param criterion the network selection criterion: "BIC".
+#' @param dat a data matrix of n*node dimension
+#' @param group a vector of positive integers of length ng such that sum(group) = node
+#' @param lambda a vector of penalty values for network selection, each penalty value determines a network
+#' @param network a set of networks determined by one of the penalized approaches
+#' @param method the method used in the likelihood approach ("pw", "sp", or "pm")
+#' @param criterion selection criterion such as BIC
 #'
-#' @details
-#' One has to specify the whole data matrix including the outcome and covariates, a vector indicating the sizes of
-#' variables in each group that data matrix divides has to be specified.
+#' @details This approach selects the network using the BIC, by refitting each
+#' network to obtain the log-likelihood (objective function) and then
+#' uses BIC for the selection.
 #'
-#' One can choose the desired approach, which including "pw", "pm", or "sp" for fitting the network model. Alsom a network
-#' selection criterion has to be specified. Currently, the implemented network selection criterion is "BIC".
+#' @return Estimate of the model parameters (vectorized) and
+#'         the covariance matrix estimate corresponding to the vectorized parameters.
 #'
-#' @return
-#' The function returns
+#' @references Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
+#' @references Chen, H. Y. and Chen, J. (2020). Network selection through semiparametric odds ratio model. Manuscript.
 #'
-#' 1. the index of the selected model
-#'
-#' 2. the structure of the selected network
-#'
-#' 3. all the BICs corresponding to the set of networks
-#'
-#' 4. all the log-likelihood values corresponding to the set of networks: sum of the node-wise pseudo-likelihoods for
-#' \code{method = "pw"}; sum of the node-wise semiparametric likelihoods for \code{method = "sp"}; the joint permutation
-#' likelihoods for \code{method = "pm"}
-#'
-#' @examples
-#' \dontrun{
+#' @examples \dontrun{
 #' n <- 200; p <- 10
 #' datmat <- matrix(rnorm(n * p), ncol = p)
 #' vargroup <- c(2, 3, 1, 4)
@@ -44,9 +32,6 @@
 #'                       network = network, method = 'pm', criterion = 'BIC')
 #' fit0[[2]]
 #' }
-#'
-#' @references Chen, H. Y. and Chen, J. (2021). Semiparametric odds ratio model for network detection. Manuscript.
-#' @references Chen, H. Y. (2021). Semiparametric odds ratio model and its applications. draft.
 #'
 #' @export
 #'
