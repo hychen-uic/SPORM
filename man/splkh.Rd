@@ -7,21 +7,21 @@
 splkh(y, x, niter = 50, eps = 1e-06, vect = "col")
 }
 \arguments{
-\item{y}{outcomes: can be a vector of length n or a matrix of nxq dimension}
+\item{y}{outcomes: can be a vector of length n or a matrix of nxq dimension.}
 
-\item{x}{covariates: a matrix of nxp dimension}
+\item{x}{covariates: a matrix of nxp dimension.}
 
-\item{niter}{maximum number of iterations in finding the estimator}
+\item{niter}{maximum number of iterations in finding the estimator.}
 
 \item{eps}{convergence criterion: discrepancy between successive
-iterations for terminal the iteration}
+iterations for terminating the iteration.}
 
 \item{vect}{methods of vectorization of parameter matrix.
-Either column-wise (vect='col') or row-wise (vect='row')}
+Either column-wise (vect='col') or row-wise (vect='row').}
 }
 \value{
 Estimate of the model parameters (vectorized) and
-        the covariance matrix estimate corresponding to the vectorized parameters.
+the covariance matrix estimate corresponding to the vectorized parameters.
 }
 \description{
 This approach uses the maximum semiparametric likelihood approach to estimating
@@ -29,8 +29,8 @@ the parameters in the semiparametric odds ratio model.
 }
 \details{
 This method maximizes the semiparametric likelihood to obtain the parameter estimator
-         and uses the inverse of the profile information matrix to estimate
-         the asymptotic variance of the estimator.
+and uses the inverse of the profile information matrix to estimate
+the asymptotic variance of the estimator.
 }
 \examples{
 \dontrun{Example 1:
@@ -50,11 +50,11 @@ splkh(y,x,niter=40,eps=1e-6,vect="row")}
 }
 \references{
 Chen, H. Y. (2007). A semiparametric odds ratio model for measuring association,
-            Biometrics,63,413--421.
+\emph{Biometrics},\strong{63},413--421.
 
 Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
 
 Chen, H. Y., and Rader, D. E., and Li, M. (2015). Likelihood inference on
-             semiparametric odds ratio Model. Journal of the American Statistical Association,
-             110,1125-1135.
+semiparametric odds ratio Model. \emph{Journal of the American Statistical Association},
+\strong{110},1125-1135.
 }

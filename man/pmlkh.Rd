@@ -17,30 +17,30 @@ pmlkh(
 )
 }
 \arguments{
-\item{dat}{a data matrix of nxp dimension,}
+\item{dat}{a data matrix of nxp dimension.}
 
 \item{group}{a vector of positive integers of length ng
 such that sum(group)=p.}
 
-\item{niter}{the maximum number of iterations}
+\item{niter}{the maximum number of iterations.}
 
 \item{eps}{convergence criterion: discrepancy between successive
-iterations for terminal the iteration.}
+iterations for terminating the iteration.}
 
-\item{nlag}{the averaged parameter values in the sequence to assess convergence, default nlag=20}
+\item{nlag}{the averaged parameter values in the sequence to assess convergence, default nlag=20.}
 
-\item{nburnin}{the burnin steps before a sample is taken. default nburnin=5e4}
+\item{nburnin}{the burnin steps before a sample is taken, default nburnin=5e4.}
 
-\item{nsamp}{the sample sizes to be taken in the MCMC sampling of permutation. default nsamp=1e4}
+\item{nsamp}{the sample sizes to be taken in the MCMC sampling of permutation, default nsamp=1e4.}
 
-\item{nintv}{the sampling interval (number of steps ignored) in the MCMC chain. default nintv=2e2}
+\item{nintv}{the sampling interval (number of steps ignored) in the MCMC chain, default nintv=2e2.}
 
 \item{maxcyc}{the maximum step size (cycle of the permutation) in obtaining a candidate permutation
-(change from the previous one) in the Gibbs sampling. default maxcyc=2}
+(change from the previous one) in the Gibbs sampling, default maxcyc=2.}
 }
 \value{
 Estimate of the model parameters (column-wise vectorization) and
-        the covariance matrix estimate corresponding to the vectorized parameters.
+the covariance matrix estimate corresponding to the vectorized parameters.
 }
 \description{
 This approach uses the maximum permutation likelihood approach to estimating
@@ -48,10 +48,10 @@ the parameters in the semiparametric odds ratio model.
 }
 \details{
 This method maximizes the permutation likelihood to obtain the parameter estimator
-         and uses the inverse of the permutation likelihood information matrix to estimate
-         the asymptotic variance of the estimator.
-         The permutation likelihood is approximated using the Gibbs sampler
-         of permutations with non-constant weights (probability).
+and uses the inverse of the permutation likelihood information matrix to estimate
+the asymptotic variance of the estimator.
+The permutation likelihood is approximated using the Gibbs sampler
+of permutations with non-constant weights (probability).
 }
 \examples{
 \dontrun{

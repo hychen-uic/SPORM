@@ -7,25 +7,25 @@
 pwlkhfix(y, x, fixstruct, niter = 50, eps = 1e-06, vect = "col")
 }
 \arguments{
-\item{y}{outcomes: a matrix of nxq dimension}
+\item{y}{outcomes: a matrix of nxq dimension.}
 
-\item{x}{covariates: a matrix of nxp dimension}
+\item{x}{covariates: a matrix of nxp dimension.}
 
 \item{fixstruct}{a pxq matrix specifying location of fixed parameter (0),
-or parameter to be estimated (1)}
+or parameter to be estimated (1).}
 
-\item{niter}{maximum number of iterations in finding the estimator}
+\item{niter}{maximum number of iterations in finding the estimator.}
 
 \item{eps}{convergence criterion: discrepancy between successive
-iterations for terminal the iteration}
+iterations for terminating the iteration.}
 
 \item{vect}{methods of vectorization of parameter matrix.
-Either column-wise (vect='col') or row-wise (vect='row')}
+Either column-wise (vect='col') or row-wise (vect='row').}
 }
 \value{
 Estimate of the model parameters (vectorized),
-        the covariance matrix estimate corresponding to the vectorized parameters,
-        and the log-likelihood.
+the covariance matrix estimate corresponding to the vectorized parameters,
+and the log-likelihood.
 }
 \description{
 This approach uses the maximum pairwise pseudo-likelihood approach
@@ -34,11 +34,11 @@ accommodating the pre-specified fixed structure in parameters.
 }
 \details{
 This method maximizes the pairwise likelihood to obtain the parameter estimator
-         and uses U-statistic theory to estimate the asymptotic variance of the estimator.
+and uses U-statistic theory to estimate the asymptotic variance of the estimator.
 }
 \examples{
 \dontrun{
-Use the internal data file name dat, a 400x9 data matrix.
+# Use the internal data file name dat, a 400x9 data matrix.
 outcomes=dat[,1:2]
 covariates=dat[,4:7]
 structure <- matrix(rbinom(n=2*4,size=1,p=0.6), ncol = 4)
@@ -48,12 +48,12 @@ pwlkhfix(y = outcomes, x = covariates, fixstruct = structure)
 }
 \references{
 Chan K. C. G.(2013). Nuisance parameter elimination for proportional likelihood
-            ratio models with nonignorable missingness and random truncation. Biometrika, 100,
-            269-276.
+ratio models with nonignorable missingness and random truncation. \emph{Biometrika}, \strong{100},
+269-276.
 
 Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
 
 Liang, K.Y. and Qin, J. (2000). Regression analysis under non-standard situations:
-            a pairwise pseudolikelihood approach, Journal of the Royal Statistical Society, Ser. B,
-            62, 773-786.
+a pairwise pseudolikelihood approach, \emph{Journal of the Royal Statistical Society, Ser. B},
+\strong{62}, 773-786.
 }

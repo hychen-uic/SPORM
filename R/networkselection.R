@@ -1,40 +1,41 @@
-#' The network selection from a set of selected networks using output from one of
+###------------------------------------------------------------
+#   The function performs network selection using output
+#   from one of the penalty approaches:
+#                 pwpenlkh, sppenlkh, or pmpenlkh
+###---------------------------------------------------------------
+#' The network selection from a set of selected determined by
 #' the penalized likelihood approaches
 #'
 #' This approach selects the network using the BIC.
 #'
-#' @param dat a data matrix of nxnode dimension
-#' @param group a vector of positive integers of length ng such that sum(group) = node
-#' @param lambda a vector of penalty values for network selection, each penalty value determines a network
-#' @param network a set of networks determined by one of the penalized approaches
-#' @param method the method used in the likelihood approach ("pw", "sp", or "pm")
-#' @param criterion selection criterion such as BIC
+#' @param dat a data matrix of nxnode dimension.
+#' @param group a vector of positive integers of length ng such that sum(group)=node.
+#' @param lambda a vector of penalty values for network selection, each penalty value determines a network.
+#' @param network a set of networks determined by one of the penalized approaches.
+#' @param method the method used in the likelihood approach ("pw", "sp", or "pm").
+#' @param criterion selection criterion such as BIC.
 #'
-#' @details This approach selects the network using the BIC, by refitting each
+#' @details  This approach selects the network using the BIC. by refitting each
 #' network to obtain the log-likelihood (objective function) and then
 #' uses BIC for the selection.
 #'
-#' @return Estimate of the model parameters (vectorized) and
-#'         the covariance matrix estimate corresponding to the vectorized parameters.
+#' @return The selected network identity, the selected network structure, BIC values for
+#'         the set of networks, and the log-likelihood values for the set of networks.
 #'
 #' @references Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
 #' @references Chen, H. Y. and Chen, J. (2020). Network selection through semiparametric odds ratio model. Manuscript.
 #'
 #' @examples \dontrun{
-#' n <- 200; p <- 10
-#' datmat <- matrix(rnorm(n * p), ncol = p)
-#' vargroup <- c(2, 3, 1, 4)
-#' penaltyparam <- c(10, 50, 500)
-#' fit <- pmpenlkh(dat = datmat, group = vargroup, lambda = penaltyparam,
-#'                 nsamp = 2e4, niter = 50)
-#' network <- fit[[4]]
-#' fit0 <- networkselect(dat = datmat, group = vargroup, lambda = penaltyparam,
-#'                       network = network, method = 'pm', criterion = 'BIC')
-#' fit0[[2]]
+#' n=200; p=10
+#' datmat=matrix(rnorm(n * p), ncol = p)
+#' vargroup=c(2, 3, 1, 4)
+#' penaltyparam=c(10, 50, 500)
+#' network=pmpenlkh(dat=datmat, group=vargroup, lambda=penaltyparam)[[4]]
+#' sel=networkselect(dat=datmat, group=vargroup,lambda=penaltyparam,networ=network,method='pw')
+#' sel[[2]] # selected network structure
 #' }
 #'
 #' @export
-#'
 networkselect <- function(dat, group, lambda, network, method, criterion) {
   n <- dim(dat)[1]
   p <- dim(dat)[2]

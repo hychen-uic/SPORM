@@ -7,25 +7,25 @@
 splkhfix(y, x, fixstruct, niter = 50, eps = 1e-06, vect = "col")
 }
 \arguments{
-\item{y}{outcomes: a matrix of nxq dimension}
+\item{y}{outcomes: a matrix of nxq dimension.}
 
-\item{x}{covariates: a matrix of nxp dimension}
+\item{x}{covariates: a matrix of nxp dimension.}
 
 \item{fixstruct}{a pxq matrix specifying location of fixed parameter (0),
-or parameter to be estimated (1)}
+or parameter to be estimated (1).}
 
-\item{niter}{the maximum number of iterations in finding the estimator}
+\item{niter}{the maximum number of iterations in finding the estimator.}
 
 \item{eps}{convergence criterion: discrepancy between successive
-iterations for terminal the iteration}
+iterations for terminating the iteration.}
 
 \item{vect}{methods of vectorization of parameter matrix.
-Either column-wise (vect='col') or row-wise (vect='row')}
+Either column-wise (vect='col') or row-wise (vect='row').}
 }
 \value{
 Estimate of the model parameters (vectorized),
-        the covariance matrix estimate corresponding to the vectorized parameters,
-        and the log-likelihood.
+the covariance matrix estimate corresponding to the vectorized parameters,
+and the log-likelihood.
 }
 \description{
 This approach uses the maximum semiparametric likelihood approach
@@ -34,12 +34,12 @@ accommodating the pre-specified fixed structure in parameters.
 }
 \details{
 This method maximizes the semiparametric likelihood to obtain the parameter estimator
-         and uses the inverse of the profile information matrix
-         to estimate the asymptotic variance of the estimator.
+and uses the inverse of the profile information matrix
+to estimate the asymptotic variance of the estimator.
 }
 \examples{
 \dontrun{
-Use the internal data file name dat, a 400x9 data matrix.
+# Use the internal data file name dat, a 400x9 data matrix.
 outcomes=dat[,1:2]
 covariates=dat[,4:7]
 structure <- matrix(rbinom(n=2*4,size=1,p=0.6), ncol = 4)
@@ -51,6 +51,6 @@ splkhfix(y = outcomes, x = covariates, fixstruct = structure)
 Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
 
 Chen, H. Y., and Rader, D. E., and Li, M. (2015). Likelihood inference on
-             semiparametric odds ratio Model. Journal of the American Statistical Association,
-             110,1125-1135.
+semiparametric odds ratio Model. \emph{Journal of the American Statistical Association},
+\strong{110},1125-1135.
 }

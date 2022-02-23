@@ -8,13 +8,13 @@
 #' This approach uses the maximum semiparametric likelihood approach to estimating
 #' the parameters in the semiparametric odds ratio model.
 #'
-#' @param y outcomes: can be a vector of length n or a matrix of nxq dimension
-#' @param x covariates: a matrix of nxp dimension
-#' @param niter maximum number of iterations in finding the estimator
+#' @param y outcomes: can be a vector of length n or a matrix of nxq dimension.
+#' @param x covariates: a matrix of nxp dimension.
+#' @param niter maximum number of iterations in finding the estimator.
 #' @param eps convergence criterion: discrepancy between successive
-#'            iterations for terminal the iteration
+#'            iterations for terminating the iteration.
 #' @param vect methods of vectorization of parameter matrix.
-#'        Either column-wise (vect='col') or row-wise (vect='row')
+#'        Either column-wise (vect='col') or row-wise (vect='row').
 #'
 #' @details This method maximizes the semiparametric likelihood to obtain the parameter estimator
 #'          and uses the inverse of the profile information matrix to estimate
@@ -24,11 +24,11 @@
 #'         the covariance matrix estimate corresponding to the vectorized parameters.
 #'
 #' @references Chen, H. Y. (2007). A semiparametric odds ratio model for measuring association,
-#'             Biometrics,63,413--421.
+#'             *Biometrics*,**63**,413--421.
 #' @references Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
 #' @references Chen, H. Y., and Rader, D. E., and Li, M. (2015). Likelihood inference on
-#'              semiparametric odds ratio Model. Journal of the American Statistical Association,
-#'              110,1125-1135.
+#'              semiparametric odds ratio Model. *Journal of the American Statistical Association*,
+#'              **110**,1125-1135.
 #'
 #' @examples \dontrun{Example 1:
 #' n=100; p=2

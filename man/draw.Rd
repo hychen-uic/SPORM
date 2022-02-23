@@ -7,7 +7,7 @@
 draw(x)
 }
 \arguments{
-\item{x}{input argument}
+\item{x}{input argument.}
 }
 \description{
 This function is used to draw the progression of the parameter estimates

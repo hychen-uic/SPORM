@@ -7,39 +7,39 @@
 sppenlkh(dat, group, lambda, niter = 50, eps = 1e-06)
 }
 \arguments{
-\item{dat}{a data matrix of nxnode dimension}
+\item{dat}{a data matrix of nxnode dimension.}
 
 \item{group}{a vector of positive integers of length ng
-such that sum(group)=node}
+such that sum(group)=node.}
 
 \item{lambda}{a vector of penalty values for network selection,
-each penalty value determine a network}
+each penalty value determines a network.}
 
 \item{niter}{maximum number of iterations in finding the estimator}
 
 \item{eps}{convergence criterion: discrepancy between successive
-iterations for terminal the iteration}
+iterations for terminating the iteration.}
 }
 \value{
-group denoting the input node clusters, a set of networks identified corresponding
-          to the penalty values (with within group connections coded by NA),
-          annotation of network connection (0=not connected etc.)
-          the set of networks identified with within group connections coded by 0.
+Group denoting the input node clusters, a set of networks identified corresponding
+to the penalty values (with within group connections coded by NA),
+annotation of network connection (0=not connected etc.)
+the set of networks identified with within group connections coded by 0.
 }
 \description{
 This approach selects network structure
-   under the semiparametric odds ratio model
-   using the penalized semiparametric likelihood approach.
-   The network selection is the node-wise approach.
+under the semiparametric odds ratio model
+using the penalized semiparametric likelihood approach.
+The network selection is the node-wise approach.
 }
 \details{
 This method maximizes the penalized semiparametric likelihood
-         with penalty being the l^1-norm of the parameters to select
-         the network structure.
+with penalty being the l^1-norm of the parameters to select
+the network structure.
 }
 \examples{
 \dontrun{
-Use the internal data file name dat, a 400x9 data matrix.
+# Use the internal data file name dat, a 400x9 data matrix.
 group=c(2,3,4)
 lambda=c(10,50,200,500,800)
 sppenlkh(dat=dat,group=group,lambda=lambda)

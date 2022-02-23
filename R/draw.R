@@ -7,7 +7,7 @@ NULL
 #' in the iterations of the permutation likelihood approach to monitor the convergence
 #' of the parameter estimates.
 #'
-#' @param x input argument
+#' @param x input argument.
 #'
 #' @export
 #'

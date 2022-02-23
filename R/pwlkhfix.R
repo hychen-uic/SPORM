@@ -14,15 +14,15 @@
 #' to estimating the parameters in the semiparametric odds ratio model
 #' accommodating the pre-specified fixed structure in parameters.
 #'
-#' @param y outcomes: a matrix of nxq dimension
-#' @param x covariates: a matrix of nxp dimension
+#' @param y outcomes: a matrix of nxq dimension.
+#' @param x covariates: a matrix of nxp dimension.
 #' @param fixstruct a pxq matrix specifying location of fixed parameter (0),
-#'                   or parameter to be estimated (1)
-#' @param niter maximum number of iterations in finding the estimator
+#'                   or parameter to be estimated (1).
+#' @param niter maximum number of iterations in finding the estimator.
 #' @param eps convergence criterion: discrepancy between successive
-#'            iterations for terminal the iteration
+#'            iterations for terminating the iteration.
 #' @param vect methods of vectorization of parameter matrix.
-#'        Either column-wise (vect='col') or row-wise (vect='row')
+#'        Either column-wise (vect='col') or row-wise (vect='row').
 #'
 #' @details This method maximizes the pairwise likelihood to obtain the parameter estimator
 #'          and uses U-statistic theory to estimate the asymptotic variance of the estimator.
@@ -32,16 +32,16 @@
 #'         and the log-likelihood.
 #'
 #' @references Chan K. C. G.(2013). Nuisance parameter elimination for proportional likelihood
-#'             ratio models with nonignorable missingness and random truncation. Biometrika, 100,
+#'             ratio models with nonignorable missingness and random truncation. *Biometrika*, **100**,
 #'             269-276.
 #' @references Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
 #'
 #' @references Liang, K.Y. and Qin, J. (2000). Regression analysis under non-standard situations:
-#'             a pairwise pseudolikelihood approach, Journal of the Royal Statistical Society, Ser. B,
-#'             62, 773-786.
+#'             a pairwise pseudolikelihood approach, *Journal of the Royal Statistical Society, Ser. B*,
+#'             **62**, 773-786.
 #'
 #' @examples \dontrun{
-#' Use the internal data file name dat, a 400x9 data matrix.
+#' # Use the internal data file name dat, a 400x9 data matrix.
 #' outcomes=dat[,1:2]
 #' covariates=dat[,4:7]
 #' structure <- matrix(rbinom(n=2*4,size=1,p=0.6), ncol = 4)

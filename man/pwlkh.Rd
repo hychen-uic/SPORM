@@ -7,21 +7,21 @@
 pwlkh(y, x, niter = 50, eps = 1e-06, vect = "col")
 }
 \arguments{
-\item{y}{outcomes: can be a vector of length n or a matrix of nxq dimension}
+\item{y}{outcomes: can be a vector of length n or a matrix of nxq dimension.}
 
-\item{x}{covariates: a matrix of nxp dimension}
+\item{x}{covariates: a matrix of nxp dimension.}
 
-\item{niter}{maximum number of iterations in finding the estimator}
+\item{niter}{maximum number of iterations in finding the estimator.}
 
 \item{eps}{convergence criterion: discrepancy between successive
-iterations for terminal the iteration}
+iterations for terminating the iteration.}
 
 \item{vect}{methods of vectorization of parameter matrix.
 Either column-wise (vect='col') or row-wise (vect='row').}
 }
 \value{
 Estimate of the model parameters (vectorized) and
-        the covariance matrix estimate corresponding to the vectorized parameters.
+the covariance matrix estimate corresponding to the vectorized parameters.
 }
 \description{
 This approach uses the maximum pairwise pseudo-likelihood approach to estimating
@@ -29,14 +29,15 @@ the parameters in the semiparametric odds ratio model.
 }
 \details{
 This method maximizes the pairwise likelihood to obtain the parameter estimator
-         and uses U-statistic theory to estimate the asymptotic variance of the estimator.
+and uses U-statistic theory to estimate the asymptotic variance of the estimator.
 }
 \examples{
-\dontrun{Example 1:
+\dontrun{
+Example 1:
 n=100; p=2
 x=matrix(2*runif(n*p)-1,ncol=p)
 y=x[,1]-x[,2]+rnorm(n)
-splkh(y,x,niter=50,eps=1e-6,vect='col')
+pwlkh(y,x,niter=50,eps=1e-6,vect='col')
 
 Example 2:
 n=200;p=2;q=2
@@ -44,18 +45,18 @@ x=matrix(2*runif(n*p)-1,ncol=p)
 y=array(0,c(n,q))
 y[,1]=x[,1]-x[,2]+rnorm(n)
 y[,2]=x[,1]+x[,2]+rnorm(n)
-splkh(y,x,niter=40,eps=1e-6,vect="row")
+pwlkh(y,x,niter=40,eps=1e-6,vect="row")
 }
 
 }
 \references{
-Chan K. C. G.(20013). Nuisance parameter elimination for proportional likelihood
-            ratio models with nonignorable missingness and random truncation. Biometrika, 100,
-            269-276.
+Chan K. C. G.(2013). Nuisance parameter elimination for proportional likelihood
+ratio models with nonignorable missingness and random truncation. \emph{Biometrika}, \strong{100},
+269-276.
 
 Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
 
 Liang, K.Y. and Qin, J. (2000). Regression analysis under non-standard situations:
-            a pairwise pseudolikelihood approach, Journal of the Royal Statistical Society, Ser. B,
-            62, 773-786.
+a pairwise pseudolikelihood approach. \emph{Journal of the Royal Statistical Society, Ser. B},
+\strong{62}, 773-786.
 }

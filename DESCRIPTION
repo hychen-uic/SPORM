@@ -11,3 +11,18 @@ License: GPL-2 | GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
+Collate: 
+    'SPORM-package.R'
+    'dat.R'
+    'draw.R'
+    'networkselection.R'
+    'pmlkh.R'
+    'pmlkhfix.R'
+    'pmpenlkh.R'
+    'pwlkh.R'
+    'pwlkhfix.R'
+    'pwpenlkh.R'
+    'splkh.R'
+    'splkhfix.R'
+    'sppenlkh.R'
