@@ -33,7 +33,7 @@ each penalty value determines a network.}
 
 \item{niter}{maximum number of iterations in finding the estimator.}
 
-\item{eps}{convergence criterion: discrepancy between successive.
+\item{eps}{convergence criterion: discrepancy between successive
 iterations for terminating the iteration}
 
 \item{maxcyc}{the maximum cycle length in the candidate permutation update.}

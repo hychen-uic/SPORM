@@ -3,7 +3,7 @@
 #   from one of the penalty approaches:
 #                 pwpenlkh, sppenlkh, or pmpenlkh
 ###---------------------------------------------------------------
-#' The network selection from a set of selected determined by
+#' The network selection from a set of networks determined by
 #' the penalized likelihood approaches
 #'
 #' This approach selects the network using the BIC.
@@ -15,7 +15,7 @@
 #' @param method the method used in the likelihood approach ("pw", "sp", or "pm").
 #' @param criterion selection criterion such as BIC.
 #'
-#' @details  This approach selects the network using the BIC. by refitting each
+#' @details  This approach selects the network using the BIC, by refitting each
 #' network to obtain the log-likelihood (objective function) and then
 #' uses BIC for the selection.
 #'

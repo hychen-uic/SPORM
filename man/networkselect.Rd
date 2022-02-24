@@ -2,7 +2,7 @@
 % Please edit documentation in R/networkselection.R
 \name{networkselect}
 \alias{networkselect}
-\title{The network selection from a set of selected determined by
+\title{The network selection from a set of networks determined by
 the penalized likelihood approaches}
 \usage{
 networkselect(dat, group, lambda, network, method, criterion)
@@ -28,7 +28,7 @@ the set of networks, and the log-likelihood values for the set of networks.
 This approach selects the network using the BIC.
 }
 \details{
-This approach selects the network using the BIC. by refitting each
+This approach selects the network using the BIC, by refitting each
 network to obtain the log-likelihood (objective function) and then
 uses BIC for the selection.
 }

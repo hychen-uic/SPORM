@@ -50,7 +50,7 @@ pwlkh(y,x,niter=40,eps=1e-6,vect="row")
 
 }
 \references{
-Chan K. C. G.(2013). Nuisance parameter elimination for proportional likelihood
+Chan K. C. G. (2013). Nuisance parameter elimination for proportional likelihood
 ratio models with nonignorable missingness and random truncation. \emph{Biometrika}, \strong{100},
 269-276.
 

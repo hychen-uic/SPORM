@@ -22,7 +22,7 @@
 #' @return Estimate of the model parameters (vectorized) and
 #'         the covariance matrix estimate corresponding to the vectorized parameters.
 #'
-#' @references Chan K. C. G.(2013). Nuisance parameter elimination for proportional likelihood
+#' @references Chan K. C. G. (2013). Nuisance parameter elimination for proportional likelihood
 #'             ratio models with nonignorable missingness and random truncation. *Biometrika*, **100**,
 #'             269-276.
 #'

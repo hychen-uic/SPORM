@@ -20,7 +20,7 @@
 #' @param nsamp size of the Monte Carlo sample taken for mean and variance matrix approximation.
 #' @param nintv sampling interval in the Monte Carlo Markov chain (Metropolis).
 #' @param niter maximum number of iterations in finding the estimator.
-#' @param eps convergence criterion: discrepancy between successive.
+#' @param eps convergence criterion: discrepancy between successive
 #'            iterations for terminating the iteration
 #' @param maxcyc the maximum cycle length in the candidate permutation update.
 #'
