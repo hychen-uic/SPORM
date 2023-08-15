@@ -5,7 +5,7 @@ Version: 0.0.0.9000
 Author: Hua Yun Chen
 Maintainer: Hua Yun Chen <hychen@uic.edu>
 Description: This package implements multivariate analysis and variable selection for 
-    multivariate data based on various likelihood approach.
+    multivariate data based on various likelihood approaches.
 Depends: R (>= 3.5.0)
 License: GPL-2 | GPL-3
 Encoding: UTF-8
@@ -14,8 +14,8 @@ RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Collate: 
     'SPORM-package.R'
-    'dat.R'
     'draw.R'
+    'example.R'
     'networkselection.R'
     'pmlkh.R'
     'pmlkhfix.R'
