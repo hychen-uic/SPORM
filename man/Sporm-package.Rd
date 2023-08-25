@@ -6,7 +6,6 @@
 \alias{SPORM-package}
 \title{SPORM: Statistical analysis under the Semi-Parametric Odds Ratio Model}
 \description{
-This package implements multivariate analysis and variable selection for 
-    multivariate data based on various likelihood approach.
+This package implements multivariate analysis and variable selection for multivariate data based on various likelihood approaches.
 }
 \keyword{internal}
