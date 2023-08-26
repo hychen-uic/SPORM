@@ -68,6 +68,7 @@ pwlkh <- function(y, x, niter = 50, eps = 1e-6, vect = "col") {
   estv <- matrix(0, nrow = np * nq, ncol = np * nq)
 
   converge <- 0
+
   if (vect == "col"){
     fit <- .Fortran("pwmlecol", as.double(y), as.double(x), as.integer(n), as.integer(np),
                     as.integer(nq), as.double(theta), as.double(estv),
