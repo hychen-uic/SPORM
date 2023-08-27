@@ -17,6 +17,7 @@ You can install the development version of TEV from [GitHub](https://github.com/
 # install.packages("devtools")
 devtools::install_github("hychen-uic/SPORM")
 ```
+You may also need to [download Rtools43](https://cran.r-project.org/bin/windows/Rtools/rtools43/rtools.html) and install it before installing the package SPORM.
 
 ## Instructions
 
