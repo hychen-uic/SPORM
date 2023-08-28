@@ -5,7 +5,7 @@
 \title{The network selection from a set of networks determined by
 the penalized likelihood approaches}
 \usage{
-networkselect(dat, group, lambda, network, method, criterion)
+networkselect(dat, group, lambda, network, method = "pw", criterion = "BIC")
 }
 \arguments{
 \item{dat}{a data matrix of nxnode dimension.}
@@ -38,7 +38,7 @@ n=200; p=10
 datmat=matrix(rnorm(n * p), ncol = p)
 vargroup=c(2, 3, 1, 4)
 penaltyparam=c(10, 50, 500)
-network=pmpenlkh(dat=datmat, group=vargroup, lambda=penaltyparam)[[4]]
+network=pwpenlkh(dat=datmat, group=vargroup, lambda=penaltyparam)[[4]]
 sel=networkselect(dat=datmat, group=vargroup,lambda=penaltyparam,networ=network,method='pw')
 sel[[2]] # selected network structure
 }

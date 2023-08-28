@@ -30,13 +30,13 @@
 #' datmat=matrix(rnorm(n * p), ncol = p)
 #' vargroup=c(2, 3, 1, 4)
 #' penaltyparam=c(10, 50, 500)
-#' network=pmpenlkh(dat=datmat, group=vargroup, lambda=penaltyparam)[[4]]
+#' network=pwpenlkh(dat=datmat, group=vargroup, lambda=penaltyparam)[[4]]
 #' sel=networkselect(dat=datmat, group=vargroup,lambda=penaltyparam,networ=network,method='pw')
 #' sel[[2]] # selected network structure
 #' }
 #'
 #' @export
-networkselect <- function(dat, group, lambda, network, method, criterion) {
+networkselect <- function(dat, group, lambda, network, method="pw", criterion="BIC") {
   n <- dim(dat)[1]
   p <- dim(dat)[2]
   ng <- length(group)
