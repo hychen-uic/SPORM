@@ -37,7 +37,12 @@
 #'
 #'@export
 pwpenlkhsimple <- function(y,x,lambda,niter=50,eps=1e-6) {
-
+  if(!is.loaded("pairwisePENlkh.so")){
+    dyn.load("src/makevars/pairwisePENlkh.so")
+  }else{
+    dyn.unload("src/makevars/pairwisePENlkh.so")
+    dyn.load("src/makevars/pairwisePENlkh.so")
+  }
   n=dim(y)[1]
   p=dim(y)[2]
   q=dim(x)[2]
@@ -46,11 +51,12 @@ pwpenlkhsimple <- function(y,x,lambda,niter=50,eps=1e-6) {
   selparm=array(0,c(p,q,nlam))
 
   for(k in 1:nlam){
-    fit=.Fortran("pwpenlkh",as.double(y),as.double(x),
+    fit=.Fortran("pairwisePENlkh",as.double(y),as.double(x),
                   as.integer(n),as.integer(p),as.integer(q),
                   as.double(theta),as.integer(selparm[,,k]),
                   as.integer(niter),as.double(eps),as.double(lambda[k]))
     }
+  dyn.unload("src/makevars/pairwisePENlkh.so")
 
   return(list(lambda,selparm))
 }
