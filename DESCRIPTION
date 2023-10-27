@@ -23,6 +23,7 @@ Collate:
     'pwlkh.R'
     'pwlkhfix.R'
     'pwpenlkh.R'
+    'pwpenlkhsimple.R'
     'splkh.R'
     'splkhfix.R'
     'sppenlkh.R'
