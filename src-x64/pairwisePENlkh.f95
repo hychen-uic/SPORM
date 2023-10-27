@@ -3,7 +3,7 @@
     module pwPENLKH
     use, intrinsic :: iso_c_binding
     implicit none
-    public :: NetworkSelectbyPW
+    public :: NetworkSelectbyPW,penpwlkh
 
     contains
 
