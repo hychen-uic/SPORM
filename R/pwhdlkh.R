@@ -51,6 +51,7 @@ pwhdlkh<- function(y,x,lambda,niter=50,eps=1e-6) {
                   as.integer(n),as.integer(p),as.integer(q),
                   as.double(theta),as.integer(selparm[,,k]),
                   as.integer(niter),as.double(eps),as.double(lambda[k]))
+    selparm[,,k]=fit[[7]] #record the result of the fit
     }
 
   return(list(lambda,selparm))
