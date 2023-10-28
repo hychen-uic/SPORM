@@ -38,12 +38,7 @@
 #'@export
 #'
 pwpenlkhsimple <- function(y,x,lambda,niter=50,eps=1e-6) {
-#  if(!is.loaded("pairwisePENlkh.so")){
-#    dyn.load("src/makevars/pairwisePENlkh.so")
-#  }else{
-#    dyn.unload("src/makevars/pairwisePENlkh.so")
-#    dyn.load("src/makevars/pairwisePENlkh.so")
-#  }
+
   n=dim(y)[1]
   p=dim(y)[2]
   q=dim(x)[2]
@@ -57,7 +52,6 @@ pwpenlkhsimple <- function(y,x,lambda,niter=50,eps=1e-6) {
                   as.double(theta),as.integer(selparm[,,k]),
                   as.integer(niter),as.double(eps),as.double(lambda[k]))
     }
-#  dyn.unload("src/makevars/pairwisePENlkh.so")
 
   return(list(lambda,selparm))
 }
