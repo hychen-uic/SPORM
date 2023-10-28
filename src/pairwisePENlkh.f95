@@ -3,7 +3,7 @@
     module pwPENLKH
     use, intrinsic :: iso_c_binding
     implicit none
-    public :: NetworkSelectbyPW,penpwlkh
+    public :: NetworkSelectbyPW, pwHDlkh
 
     contains
 
@@ -62,7 +62,7 @@
 
       do j=1,nlam
       ! selection by penalized likelihood
-        call penpwlkh(dat(:,1:np),dat(:,(np+1):node),n,np,nq,gam, &
+        call pwHDlkh(dat(:,1:np),dat(:,(np+1):node),n,np,nq,gam, &
                           selnet((ncurrent+1):(ncurrent+np),1:nq,j),niter,eps,lam(j))
       enddo
 
@@ -102,22 +102,23 @@
 !   with multiple outcomes (MO).
 ! Using l^1 penalty by coordinate descending approach
 !-----------------------------------------------------------------
-subroutine penpwlkh(y,x,n,p,q,theta,Sel,niter,eps,lam)
+subroutine pwHDlkh(y,x,n,p,q,theta,Sel,niter,eps,lam) bind(C, name = "pwhdlkh_")
+
 
   implicit none
 
-  integer, parameter:: dp = selected_real_kind(15, 307)
+  !!!!integer, parameter:: dp = selected_real_kind(15, 307)
 
-  integer n,p,q,niter
-  integer Sel(p,q),selold
-  real(kind=dp) lam,eps
-  real(kind=dp) y(n,p),x(n,q)
-  real(kind=dp) theta(p,q) ! columnwise vectorization
+  integer (C_INT) n,p,q,niter
+  integer (C_INT) Sel(p,q),selold
+  real (C_DOUBLE) lam,eps
+  real (C_DOUBLE) y(n,p),x(n,q)
+  real (C_DOUBLE) theta(p,q) ! columnwise vectorization
 
-  integer i,j,k,kk,kv,lv,irep
-  real(kind=dp) probtemp,thetaold
-  real(kind=dp) der,der2,delta
-
+  integer (C_INT) i,j,k,kk,kv,lv,irep
+  real (C_DOUBLE) probtemp,thetaold
+  real (C_DOUBLE) der,der2,delta
+  
   do kv=1,p
     do lv=1,q
 
@@ -176,7 +177,8 @@ subroutine penpwlkh(y,x,n,p,q,theta,Sel,niter,eps,lam)
 
   !write(*,*)sum(Sel)
 
-end subroutine penpwlkh
+end subroutine pwHDlkh
+
 end module pwPENLKH
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

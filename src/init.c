@@ -16,8 +16,8 @@ extern void F77_NAME(pwmlecol)(void *, void *, void *, void *, void *, void *, v
 extern void F77_NAME(pwmlerow)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 extern void F77_NAME(pwmlecolfix)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 extern void F77_NAME(pwmlerowfix)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern void F77_NAME(pwhdlkh)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 extern void F77_NAME(networkselectbypw)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
-extern void F77_NAME(penpwlkh)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 extern void F77_NAME(ormlecol)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 extern void F77_NAME(ormlerow)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 extern void F77_NAME(ormlecolfix)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
@@ -32,8 +32,8 @@ static const R_FortranMethodDef FortranEntries[] = {
   {"pwmlerow", (DL_FUNC) &F77_NAME(pwmlerow), 10},
   {"pwmlecolfix", (DL_FUNC) &F77_NAME(pwmlecolfix), 12},
   {"pwmlerowfix", (DL_FUNC) &F77_NAME(pwmlerowfix), 12},
+  {"pwhdlkh", (DL_FUNC) &F77_NAME(pwhdlkh), 10},
   {"networkselectbypw", (DL_FUNC) &F77_NAME(networkselectbypw), 10},
-  {"penpwlkh", (DL_FUNC) &F77_NAME(networkselectbypw), 10},
   {"ormlecol", (DL_FUNC) &F77_NAME(ormlecol), 10},
   {"ormlerow", (DL_FUNC) &F77_NAME(ormlerow), 10},
   {"ormlecolfix", (DL_FUNC) &F77_NAME(ormlecolfix), 12},

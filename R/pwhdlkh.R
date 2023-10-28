@@ -32,12 +32,12 @@
 #' @examples \dontrun{
 #' # use the internal data file name dat, a 400x9 data matrix.
 #' y=dat[,1:2], x=dat[,3:9];lambda=c(10,50,200,500,800)
-#' pwpenlkhsimple(y,x,lambda=lambda)
+#' pwHDlkh(y,x,lambda=lambda)
 #' }
 #'
 #'@export
 #'
-pwpenlkhsimple <- function(y,x,lambda,niter=50,eps=1e-6) {
+pwhdlkh<- function(y,x,lambda,niter=50,eps=1e-6) {
 
   n=dim(y)[1]
   p=dim(y)[2]
@@ -47,7 +47,7 @@ pwpenlkhsimple <- function(y,x,lambda,niter=50,eps=1e-6) {
   selparm=array(0,c(p,q,nlam))
 
   for(k in 1:nlam){
-    fit=.Fortran("penpwlkh",as.double(y),as.double(x),
+    fit=.Fortran("pwhdlkh",as.double(y),as.double(x),
                   as.integer(n),as.integer(p),as.integer(q),
                   as.double(theta),as.integer(selparm[,,k]),
                   as.integer(niter),as.double(eps),as.double(lambda[k]))
