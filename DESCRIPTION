@@ -21,6 +21,7 @@ Collate:
     'pmlkhfix.R'
     'pmpenlkh.R'
     'pwhdlkh.R'
+    'baseline.R'
     'pwlkh.R'
     'pwlkhfix.R'
     'pwpenlkh.R'
