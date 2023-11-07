@@ -4,7 +4,7 @@
 \alias{splkhfix}
 \title{The semiparametric likelihood approach with fixed structure}
 \usage{
-splkhfix(y, x, fixstruct, niter = 50, eps = 1e-06, vect = "col")
+splkhfix(y, x, fixstruct, theta = 0, niter = 50, eps = 1e-06, vect = "col")
 }
 \arguments{
 \item{y}{outcomes: a matrix of nxq dimension.}
@@ -13,6 +13,10 @@ splkhfix(y, x, fixstruct, niter = 50, eps = 1e-06, vect = "col")
 
 \item{fixstruct}{a pxq matrix specifying location of fixed parameter (0),
 or parameter to be estimated (1).}
+
+\item{theta}{a pxq matrix specifying fixed parameter values. non-fixed values do not matter
+the default value theta=0 is for convenience and is automatically redefined appropriately
+For non-default values, theta needs to be conformed with the actual theta in dimension.}
 
 \item{niter}{the maximum number of iterations in finding the estimator.}
 
@@ -44,6 +48,7 @@ outcomes=dat[,1:2]
 covariates=dat[,4:7]
 structure <- matrix(rbinom(n=2*4,size=1,p=0.6), ncol = 4)
 splkhfix(y = outcomes, x = covariates, fixstruct = structure)
+splkhfix(y,x,fixstruct = structure, theta=c(rep(0.2,4),rep(0,4)))
 }
 
 }

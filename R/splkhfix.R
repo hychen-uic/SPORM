@@ -18,6 +18,9 @@
 #' @param x covariates: a matrix of nxp dimension.
 #' @param fixstruct a pxq matrix specifying location of fixed parameter (0),
 #'                   or parameter to be estimated (1).
+#' @param theta a pxq matrix specifying fixed parameter values. non-fixed values do not matter
+#'        the default value theta=0 is for convenience and is automatically redefined appropriately
+#'        For non-default values, theta needs to be conformed with the actual theta in dimension.
 #' @param niter the maximum number of iterations in finding the estimator.
 #' @param eps convergence criterion: discrepancy between successive
 #'            iterations for terminating the iteration.
@@ -43,10 +46,11 @@
 #' covariates=dat[,4:7]
 #' structure <- matrix(rbinom(n=2*4,size=1,p=0.6), ncol = 4)
 #' splkhfix(y = outcomes, x = covariates, fixstruct = structure)
+#' splkhfix(y,x,fixstruct = structure, theta=c(rep(0.2,4),rep(0,4)))
 #' }
 #'
 #' @export
-splkhfix <- function(y, x, fixstruct, niter=50, eps=1e-6, vect="col") {
+splkhfix <- function(y, x, fixstruct, theta=0, niter=50, eps=1e-6, vect="col") {
 
   if(is.matrix(y) == TRUE) {
     n <- dim(y)[1]
@@ -61,7 +65,9 @@ splkhfix <- function(y, x, fixstruct, niter=50, eps=1e-6, vect="col") {
     nq <- 1
   }
 
-  theta <- rep(0, np * nq)
+  if(sum(abs(theta))<1e-8){ # allow default value
+    theta <- rep(0, np * nq)
+  }
   estv <- matrix(0, nrow = np * nq, ncol = np * nq)
 
   converge <- 0

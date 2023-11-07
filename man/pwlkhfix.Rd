@@ -4,15 +4,20 @@
 \alias{pwlkhfix}
 \title{The pairwise pseudo-likelihood approach with fixed structure}
 \usage{
-pwlkhfix(y, x, fixstruct, niter = 50, eps = 1e-06, vect = "col")
+pwlkhfix(y, x, fixstruct, theta = 0, niter = 50, eps = 1e-06, vect = "col")
 }
 \arguments{
 \item{y}{outcomes: a matrix of nxq dimension.}
 
 \item{x}{covariates: a matrix of nxp dimension.}
 
-\item{fixstruct}{a pxq matrix specifying location of fixed parameter (0),
-or parameter to be estimated (1).}
+\item{fixstruct}{a pxq matrix specifying location of parameter to be fixed (0)
+or parameter to be estimated (1).
+NOTE: Fixed parametervalues can be nonzero and determined by theta.}
+
+\item{theta}{a pxq matrix specifying fixed parameter values. non-fixed values do not matter
+the default value theta=0 is for convenience and is automatically redefined appropriately
+For non-default values, theta needs to be conformed with the actual theta in dimension.}
 
 \item{niter}{maximum number of iterations in finding the estimator.}
 
@@ -42,13 +47,15 @@ and uses U-statistic theory to estimate the asymptotic variance of the estimator
 outcomes=dat[,1:2]
 covariates=dat[,4:7]
 structure <- matrix(rbinom(n=2*4,size=1,p=0.6), ncol = 4)
+theta=matrix(0,nrow=2,ncol=4)
 pwlkhfix(y = outcomes, x = covariates, fixstruct = structure)
+pwlkhfix(y,x,fixstruct=structure,theta=c(rep(0.1,4),rep(0,4)))
 }
 
 }
 \references{
 Chan K. C. G.(2013). Nuisance parameter elimination for proportional likelihood
-ratio models with nonignorable missingness and random truncation. \emph{Biometrika}, \strong{100},
+ratio models with nonignorable missingness and random truncation. Biometrika, 100,
 269-276.
 
 Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.

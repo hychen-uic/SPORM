@@ -8,11 +8,15 @@
     contains
 
 !######################################################################
-!----------------------------------------------------
+!----------------------------------------------------------------------
 !  pairwise likelihood approach
 !  parameter gam is vectorized by column.
-!    Fix provides the structure of the association
-!----------------------------------------------------
+!    Fix provides the structure of the association to be computed.
+!    Theta enables fixed parameter values (other than 0) for those 
+!       not to be computed. 
+!    If a theta component is not to be included in the model, 
+!        it should be set to 0.
+!----------------------------------------------------------------------
 
 subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(C, name = "pwmlecolfix_")
 
@@ -50,10 +54,10 @@ subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
         probtemp=0
         do k=1,q
           do kk=1,p
-            if(fix(kk,k)/=0) then
+            !if(fix(kk,k)/=0) then
               temp(k,kk)=(y(i,kk)-y(j,kk))*(x(j,k)-x(i,k))
               probtemp=probtemp+theta((k-1)*p+kk)*temp(k,kk)
-            endif
+            !endif
           enddo
         enddo
         if(probtemp<=0) then
@@ -96,6 +100,7 @@ subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
     Call PDmatinvfix(der2,sfix,p*q)
 
     delta=matmul(der2,der)
+ 
     if(sum(abs(delta))<eps) then
       converge=1
       ! compute variance of the estimator using sandwich estimator
@@ -109,10 +114,10 @@ subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
           probtemp=0
           do k=1,q
             do kk=1,p
-              if(fix(kk,k)/=0) then
+              !if(fix(kk,k)/=0) then
                 temp(k,kk)=(y(i,kk)-y(j,kk))*(x(i,k)-x(j,k))
                 probtemp=probtemp+theta((k-1)*p+kk)*temp(k,kk)
-              endif
+              !endif
             enddo
           enddo
           if(probtemp<=0) then
@@ -161,10 +166,14 @@ subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
   enddo
 
 end subroutine pwMLECOLfix
-!-------------------------------------------
+!----------------------------------------------------------------------
 !  pairwise likelihood approach
 !  parameter gam is vectorized by row.
-!-------------------------------------------
+!    Theta enables fixed parameter values (other than 0) for those 
+!       not to be computed. 
+!    If a theta component is not to be included in the model, 
+!        it should be set to 0.
+!-----------------------------------------------------------------------
 subroutine pwMLErowfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(C, name = "pwmlerowfix_")
 
   implicit none
@@ -202,10 +211,10 @@ subroutine pwMLErowfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
         probtemp=0
         do k=1,p
           do kk=1,q
-            if(fix(k,kk)/=0) then
+            !if(fix(k,kk)/=0) then
               temp(k,kk)=(y(i,k)-y(j,k))*(x(j,kk)-x(i,kk))
               probtemp=probtemp+theta((k-1)*q+kk)*temp(k,kk)
-            endif
+            !endif
           enddo
         enddo
         if(probtemp<=0) then
@@ -257,10 +266,10 @@ subroutine pwMLErowfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
           probtemp=0
           do k=1,p
             do kk=1,q
-              if(fix(k,kk)/=0)then
+              !if(fix(k,kk)/=0)then
                 temp(k,kk)=(y(i,kk)-y(j,kk))*(x(i,k)-x(j,k))
                 probtemp=probtemp+theta((k-1)*q+kk)*temp(k,kk)
-              endif
+              !endif
             enddo
           enddo
           if(probtemp<=0) then

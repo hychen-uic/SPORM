@@ -55,9 +55,9 @@ Subroutine ORMLECOLfix(y,x,n,np,nq,fix,gam,estv,loglkh,niter,eps,converge) bind(
       do k=1,nc
          para(k)=log(1.0*(cat(k+1)-cat(k))/(cat(nc+1)-cat(nc))) !nonparametric parameter
       enddo
-      do k=1,na
-         gam(k)=0.0  !odds ratio parameter
-      enddo
+      !do k=1,na !initial values are important to keep
+      !   gam(k)=0.0  !odds ratio parameter
+      !enddo
       tp=0
 
       do k=1,nc-1
@@ -85,10 +85,10 @@ Subroutine ORMLECOLfix(y,x,n,np,nq,fix,gam,estv,loglkh,niter,eps,converge) bind(
             cp(i,j)=0
             do k=1,nq
                do l=1,np
-                  if(fix(l,k)/=0) then
+                  !if(fix(l,k)/=0) then
                     kl=(k-1)*np+l
                     cp(i,j)=cp(i,j)+gam(kl)*y(index(cat(j)),l)*x(i,k)
-                  endif
+                  !endif
                enddo
             enddo
          enddo
@@ -359,9 +359,9 @@ Subroutine orMLErowfix(y,x,n,np,nq,fix,gam,estv,loglkh,niter,eps,converge) bind(
       do k=1,nc
          para(k)=log(1.0*(cat(k+1)-cat(k))/(cat(nc+1)-cat(nc))) !nonparametric parameter
       enddo
-      do k=1,na
-         gam(k)=0.0  !odds ratio parameter
-      enddo
+      !do k=1,na ! initial values are important to keep
+      !   gam(k)=0.0  !odds ratio parameter
+      !enddo
       tp=0
 
       do k=1,nc-1
@@ -389,10 +389,10 @@ Subroutine orMLErowfix(y,x,n,np,nq,fix,gam,estv,loglkh,niter,eps,converge) bind(
             cp(i,j)=0
             do k=1,np
                do l=1,nq
-                  if(fix(k,l)/=0) then
+                  !if(fix(k,l)/=0) then
                     kl=(k-1)*nq+l
                     cp(i,j)=cp(i,j)+gam(kl)*y(index(cat(j)),k)*x(i,l)
-                  endif
+                  !endif
                enddo
             enddo
          enddo
