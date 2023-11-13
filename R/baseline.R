@@ -57,8 +57,8 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
     F=F/sum(F)
   }else{
     # initial estimate uses weight
-    n=dim(y)[1]
-    F=diag(exp(y%*%parm%*%t(x)))
+    F=diag(exp(y%*%matrix(parm,nrow=dim(y)[2])%*%t(x)))
+    #n=dim(y)[1]
     #F=rep(0,n)
     #for(i in 1:n){
     #  F[i]=exp(-as.numeric(y[i,]%*%parm%*%x[i,]))
