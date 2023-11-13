@@ -12,6 +12,8 @@
 !  pairwise likelihood approach
 !  parameter gam is vectorized by column.
 !    Fix provides the structure of the association to be computed.
+!    NOTE: when the fix struct does not include parameter to estimate,
+!          the method compute loglike value in this case.
 !    Theta enables fixed parameter values (other than 0) for those 
 !       not to be computed. 
 !    If a theta component is not to be included in the model, 
@@ -97,10 +99,13 @@ subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
       enddo
     enddo
 
-    Call PDmatinvfix(der2,sfix,p*q)
+    if(sum(sfix)/=0) then  
+      Call PDmatinvfix(der2,sfix,p*q)
+      delta=matmul(der2,der)
+    else ! The case with no parameter to estimate
+      delta=0
+    endif
 
-    delta=matmul(der2,der)
- 
     if(sum(abs(delta))<eps) then
       converge=1
       ! compute variance of the estimator using sandwich estimator
@@ -155,9 +160,11 @@ subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
         endif
       enddo
 
-      der2=der2*n*(n-1)/2.0
-      estv=matmul(der2,matmul(estv,der2)) ! sandwich estimate of variance
-
+      if(sum(sfix)/=0) then  ! exclude the case with no parameter to estimate
+        der2=der2*n*(n-1)/2.0
+        estv=matmul(der2,matmul(estv,der2)) ! sandwich estimate of variance
+      endif 
+        
       exit
     else
       theta=theta-delta
@@ -252,9 +259,13 @@ subroutine pwMLErowfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
       enddo
     enddo
 
-    Call PDmatinvfix(der2,sfix,p*q)
-
-    delta=matmul(der2,der)
+    if(sum(sfix)/=0) then  
+      Call PDmatinvfix(der2,sfix,p*q)
+      delta=matmul(der2,der)
+    else ! The case with no parameter to estimate
+      delta=0
+    endif
+     
     if(sum(abs(delta))<eps) then
       converge=1
       ! compute variance of the estimator using sandwich estimator
@@ -307,10 +318,11 @@ subroutine pwMLErowfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
         enddo
       enddo
 
-      der2=der2*n*(n-1)/2.0
-      estv=matmul(der2,matmul(estv,der2)) ! sandwich estimate of variance
-
-
+      if(sum(sfix)/=0) then  ! exclude the case with no parameter to estimate
+        der2=der2*n*(n-1)/2.0
+        estv=matmul(der2,matmul(estv,der2)) ! sandwich estimate of variance
+      endif 
+ 
       exit
     else
       theta=theta-delta

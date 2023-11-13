@@ -67,7 +67,7 @@ pwlkhfix <- function(y, x, fixstruct, theta=0, niter=50, eps=1e-6, vect="col") {
   }
   if (is.matrix(x) == TRUE) {
     nq <- dim(x)[2]
-  } else{
+  }else{
     nq <- 1
   }
   if(sum(abs(theta))<1e-8){ # allow default value
@@ -82,7 +82,7 @@ pwlkhfix <- function(y, x, fixstruct, theta=0, niter=50, eps=1e-6, vect="col") {
                     as.integer(nq), as.integer(fixstruct),
                     as.double(theta), as.double(estv), as.double(loglkh),
                     as.integer(niter), as.double(eps), as.integer(converge))
-  } else{
+  }else{
     fit <- .Fortran("pwmlerowfix", as.double(y), as.double(x), as.integer(n), as.integer(np),
                     as.integer(nq), as.integer(fixstruct),
                     as.double(theta), as.double(estv), as.double(loglkh),
