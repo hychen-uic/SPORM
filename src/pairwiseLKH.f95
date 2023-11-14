@@ -116,6 +116,7 @@ subroutine pwMLECOL(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
           do i=1,n
             estv(k,kk)=estv(k,kk)+tder(i,k)*tder(i,kk)
           enddo
+          estv(k,kk)=estv(k,kk)-sum(tder(:,k))*sum(tder(:,kk))*n
           estv(k,kk)=estv(k,kk)*4/(n-1.0)
 
           estv(kk,k)=estv(k,kk)
@@ -231,16 +232,19 @@ subroutine pwMLErow(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
           enddo
 
         enddo
-        tder(i,:)=tder(i,:)/(n-1)
+        tder(i,:)=tder(i,:)/n
 
       enddo
 
       do k=1,p*q
+        !tempm(k)=sum(tder(:,k))/n
+ 
         do kk=1,k
           estv(k,kk)=0
           do i=1,n
             estv(k,kk)=estv(k,kk)+tder(i,k)*tder(i,kk)
           enddo
+          estv(k,kk)=estv(k,kk)-sum(tder(:,k))*sum(tder(:,kk))*n
           estv(k,kk)=estv(k,kk)*4/(n-1.0)
 
           estv(kk,k)=estv(k,kk)
