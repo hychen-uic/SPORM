@@ -142,7 +142,7 @@ subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
           enddo
 
         enddo
-        tder(i,:)=tder(i,:)/(n-1)
+        tder(i,:)=tder(i,:)/(n-1.0)
 
       enddo
 
@@ -164,6 +164,7 @@ subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
       if(sum(sfix)/=0) then  ! exclude the case with no parameter to estimate
         der2=der2*n*(n-1)/2.0
         estv=matmul(der2,matmul(estv,der2)) ! sandwich estimate of variance
+        estv=estv/n ! variance for the estimate 
       endif 
         
       exit
@@ -323,6 +324,7 @@ subroutine pwMLErowfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
       if(sum(sfix)/=0) then  ! exclude the case with no parameter to estimate
         der2=der2*n*(n-1)/2.0
         estv=matmul(der2,matmul(estv,der2)) ! sandwich estimate of variance
+        estv=estv/n ! variance for the estimate 
       endif 
  
       exit

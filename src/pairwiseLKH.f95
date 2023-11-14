@@ -106,7 +106,7 @@ subroutine pwMLECOL(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
           enddo
 
         enddo
-        tder(i,:)=tder(i,:)/(n-1)
+        tder(i,:)=tder(i,:)/(n-1.0)
 
       enddo
 
@@ -116,7 +116,6 @@ subroutine pwMLECOL(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
           do i=1,n
             estv(k,kk)=estv(k,kk)+tder(i,k)*tder(i,kk)
           enddo
-          estv(k,kk)=estv(k,kk)-sum(tder(:,k))*sum(tder(:,kk))*n
           estv(k,kk)=estv(k,kk)*4/(n-1.0)
 
           estv(kk,k)=estv(k,kk)
@@ -126,6 +125,7 @@ subroutine pwMLECOL(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
       der2=der2*n*(n-1)/2.0
       estv=matmul(der2,matmul(estv,der2)) ! sandwich estimate of variance
 
+      estv=estv/n ! variance for the estimate
       exit
     else
       theta=theta-delta
@@ -232,7 +232,7 @@ subroutine pwMLErow(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
           enddo
 
         enddo
-        tder(i,:)=tder(i,:)/n
+        tder(i,:)=tder(i,:)/(n-1.0)
 
       enddo
 
@@ -244,7 +244,6 @@ subroutine pwMLErow(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
           do i=1,n
             estv(k,kk)=estv(k,kk)+tder(i,k)*tder(i,kk)
           enddo
-          estv(k,kk)=estv(k,kk)-sum(tder(:,k))*sum(tder(:,kk))*n
           estv(k,kk)=estv(k,kk)*4/(n-1.0)
 
           estv(kk,k)=estv(k,kk)
@@ -254,7 +253,7 @@ subroutine pwMLErow(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
       der2=der2*n*(n-1)/2.0
       estv=matmul(der2,matmul(estv,der2)) ! sandwich estimate of variance
 
-
+      estv=estv/n ! variance for the estimate
       exit
     else
       theta=theta-delta
