@@ -106,7 +106,8 @@ subroutine pwMLECOL(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
           enddo
 
         enddo
-        tder=tder/(n-1)
+        tder(i,:)=tder(i,:)/(n-1)
+
       enddo
 
       do k=1,p*q
@@ -230,7 +231,8 @@ subroutine pwMLErow(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
           enddo
 
         enddo
-        tder=tder/(n-1)
+        tder(i,:)=tder(i,:)/(n-1)
+
       enddo
 
       do k=1,p*q

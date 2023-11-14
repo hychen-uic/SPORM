@@ -142,7 +142,8 @@ subroutine pwMLECOLfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
           enddo
 
         enddo
-        tder=tder/(n-1)
+        tder(i,:)=tder(i,:)/(n-1)
+
       enddo
 
       do k=1,p*q
@@ -300,7 +301,8 @@ subroutine pwMLErowfix(y,x,n,p,q,fix,theta,estv,loglkh,niter,eps,converge) bind(
           enddo
 
         enddo
-        tder=tder/(n-1)
+        tder(i,:)=tder(i,:)/(n-1)
+
       enddo
 
       do k=1,p*q

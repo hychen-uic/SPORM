@@ -11,7 +11,7 @@ The goal of SPORM is to fit semiparametric odds ratio model to multivariate data
 
 ## Installation
 
-You can install the development version of TEV from [GitHub](https://github.com/) with:
+You can install the development version of SPORM from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
