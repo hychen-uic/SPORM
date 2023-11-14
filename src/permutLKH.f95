@@ -246,7 +246,8 @@ subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q)
    vtheta=vtheta-matmul(vyy,myy) !one-step update
 
  ! Laplace Apprx estimated variance is Sigma^(-1)exp(-theta*yxmean/2)
-   estv=vyy/n
+
+   estv=vyy
 
    ind=0 !convert vtheta back to matrix position
    kk=0
