@@ -57,11 +57,11 @@
      selnet(:,:,j)=0
      theta=0
      tcyc=maxcyc
- write(*,*)j,lam(j)
+ !write(*,*)j,lam(j)
 
      IT:do irep=1,niter
 
- write(*,*)irep,tcyc
+ !write(*,*)irep,tcyc
 
        thetaold=theta
        ! 1.draw permutations for approximate permutation likelihood
@@ -124,7 +124,8 @@ subroutine SLAwmg(y,n,p,group,ng,network,sample,nsamp,theta,q,lambda,niter)
      return
    endif
 
-   ! vectorize theta to vtheta
+   ! vectorize theta to vtheta and compute statistics
+    
    ind=0 !index non-zero positions
    kk=0
    do k=1,ng-1
@@ -133,8 +134,14 @@ subroutine SLAwmg(y,n,p,group,ng,network,sample,nsamp,theta,q,lambda,niter)
        do t=jj+1,jj+group(j)
        do s=kk+1,kk+group(k) !t,s order determined the vectorization
          ind=ind+1
+          ! vectorize theta
          vtheta(ind)=theta(s,t)!vectorize the non-zero theta
          vnet(ind)=network(s,t)
+          ! compute statistic
+         yy0(ind)=sum(y(:,s)*y(:,t))
+         do ii=1,nsamp
+           yy(ii,ind)=sum(y(sample(ii,:,k),s)*y(sample(ii,:,j),t))
+         enddo
        enddo
        enddo
        jj=jj+group(j)
@@ -142,43 +149,13 @@ subroutine SLAwmg(y,n,p,group,ng,network,sample,nsamp,theta,q,lambda,niter)
      kk=kk+group(k)
    enddo
 
-   ! compute statistics
-   myy=0
-   vyy=0
-   Do i=1,n
-     ind=0 !index non-zero positions
-     kk=0
-     do k=1,ng-1
-       jj=kk+group(k)
-       do j=(k+1),ng
-         do t=jj+1,jj+group(j)
-         do s=kk+1,kk+group(k) !t,s order determined the vectorization
-           ind=ind+1
-           yy0(ind)=y(i,s)*y(i,t)
-           do ii=1,nsamp
-             yy(ii,ind)=y(sample(ii,i,k),s)*y(sample(ii,i,j),t)
-           enddo
-         enddo
-         enddo
-         jj=jj+group(j)
-       enddo
-       kk=kk+group(k)
-     enddo
-
-     do k=1,q ! calculate scores and second derivatives
-       tmyy(k)=sum(yy(:,k))/nsamp
-       do j=1,k
-         vyy(k,j)=vyy(k,j)+sum(yy(:,k)*yy(:,j))/nsamp-tmyy(k)*tmyy(j)
-       enddo
-       myy(k)=myy(k)+tmyy(k)-yy0(k)
-     enddo
-
-   enddo
-
-   do k=2,q
-     do j=1,k-1
+   do k=1,q ! calculate scores and second derivatives
+     tmyy(k)=sum(yy(:,k))/nsamp
+     do j=1,k
+       vyy(k,j)=sum(yy(:,k)*yy(:,j))/nsamp-tmyy(k)*tmyy(j)
        vyy(j,k)=vyy(k,j)
      enddo
+     myy(k)=yy0(k)-tmyy(k)
    enddo
 
    !call PDmatinv(vyy,q) !perform submatrix inversion
@@ -186,7 +163,7 @@ subroutine SLAwmg(y,n,p,group,ng,network,sample,nsamp,theta,q,lambda,niter)
    !block-wise and column-wise conversion
    !call iUTvecF(network,p,group,ng,vnet,q) ! convert a block-wise matrix to vector
         ! network==>vnet
-   Call QuadP(myy,vyy,vtheta,vnet,q,niter,lambda) ! l_1 penalized selection
+   Call QuadP(myy,-vyy,vtheta,vnet,q,niter,lambda) ! l_1 penalized selection
 
    !call iUTmatF(network,p,group,ng,vnet,q) ! convert a vector to bloack-wise matrix
         ! vnet==>network

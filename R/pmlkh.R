@@ -16,6 +16,7 @@
 #' @param eps convergence criterion: discrepancy between successive
 #'            iterations for terminating the iteration.
 #' @param nlag the averaged parameter values in the sequence to assess convergence, default nlag=20.
+#' @param plot Default is TRUE, to produce the convergence plot. If FALSE, suppress the plot.
 #' @param nburnin the burnin steps before a sample is taken, default nburnin=5e4.
 #' @param nsamp the sample sizes to be taken in the MCMC sampling of permutation, default nsamp=1e4.
 #' @param nintv the sampling interval (number of steps ignored) in the MCMC chain, default nintv=2e2.
@@ -41,7 +42,7 @@
 #' }
 #'
 #' @export
-pmlkh <- function(dat, group, niter = 50, eps = 1e-2, nlag = 20,
+pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
                   nburnin = 5e4, nsamp = 1e5, nintv = 5e1, maxcyc = 2) {
   n <- dim(dat)[1]
   np <- dim(dat)[2]
@@ -68,7 +69,9 @@ pmlkh <- function(dat, group, niter = 50, eps = 1e-2, nlag = 20,
   #print(fit[[6]])
   #print(matrix(fit[[7]],ncol=nq))
   #print(array(fit[[17]],c(niter,np,np)))
-  draw(array(fit[[17]], c(niter, np, np)))
+  if(plot==TRUE){
+    draw(array(fit[[17]], c(niter, np, np)))
+    }
   return(list(fit[[6]], matrix(fit[[7]], ncol = nq), fit[[16]]))
 }
 

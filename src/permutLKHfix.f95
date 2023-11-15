@@ -267,10 +267,10 @@ subroutine LAwmgfix(y,n,p,group,ng,network,sample,nsamp,theta,estv,q)
      return
    endif
 
-   ! vectorize the theta
-   ind=0 !index non-zero theta
+   ! vectorize the theta and compute statistic
+    
+   ind=0 !index non-zero positions
    kk=0
-   vtheta(1:q)=0
    do k=1,ng-1
      jj=kk+group(k)
      do j=(k+1),ng
@@ -278,11 +278,19 @@ subroutine LAwmgfix(y,n,p,group,ng,network,sample,nsamp,theta,estv,q)
        do s=kk+1,kk+group(k) !t,s order determined the vectorization
          ind=ind+1
          if(network(s,t)/=0) then
+            ! vectorize theta
            vtheta(ind)=theta(s,t)!vectorize the non-zero theta
            vnet(ind)=1  ! Get a list form of nonzero positions
+
+            ! compute statistic
+           yy0(ind)=sum(y(:,s)*y(:,t))
+           do ii=1,nsamp
+             yy(ii,ind)=sum(y(sample(ii,:,k),s)*y(sample(ii,:,j),t))
+           enddo
          else
-           vnet(ind)=0
+            vnet(ind)=0
          endif
+
        enddo
        enddo
        jj=jj+group(j)
@@ -290,53 +298,18 @@ subroutine LAwmgfix(y,n,p,group,ng,network,sample,nsamp,theta,estv,q)
      kk=kk+group(k)
    enddo
 
-   ! compute statistics
-   yy0(1:q)=0
-   yy(1:nsamp,1:q)=0
-   myy(1:q)=0
-   vyy(1:q,1:q)=0
-   Do i=1,n
-     ind=0 !index non-zero positions
-     kk=0
-     do k=1,ng-1
-       jj=kk+group(k)
-       do j=(k+1),ng
-         do t=jj+1,jj+group(j)
-         do s=kk+1,kk+group(k) !t,s order determined the vectorization
-           ind=ind+1
-           if(network(s,t)/=0) then
-             yy0(ind)=y(i,s)*y(i,t)
-             do ii=1,nsamp
-               yy(ii,ind)=y(sample(ii,i,k),s)*y(sample(ii,i,j),t)
-             enddo
-           endif
-
-         enddo
-         enddo
-         jj=jj+group(j)
-       enddo
-       kk=kk+group(k)
-     enddo
-
-     do k=1,q ! calculate scores and second derivatives
-       tmyy(k)=sum(yy(:,k))/nsamp
-       do j=1,k
-         vyy(k,j)=vyy(k,j)+sum(yy(:,k)*yy(:,j))/nsamp-tmyy(k)*tmyy(j)
-       enddo
-       myy(k)=myy(k)+tmyy(k)-yy0(k)
-     enddo
-
-   enddo
-
-   do k=2,q
-     do j=1,k-1
+   do k=1,q ! calculate scores and second derivatives
+     tmyy(k)=sum(yy(:,k))/nsamp
+     do j=1,k
+       vyy(k,j)=sum(yy(:,k)*yy(:,j))/nsamp-tmyy(k)*tmyy(j)
        vyy(j,k)=vyy(k,j)
      enddo
+     myy(k)=yy0(k)-tmyy(k)
    enddo
 
    call PDmatinvfix(vyy,vnet,q) !perform submatrix inversion
 
-   vtheta=vtheta-matmul(vyy,myy) !one-step update
+   vtheta=vtheta+matmul(vyy,myy) !one-step update
  ! Laplace Apprx estimated variance is Sigma^(-1)exp(-theta*yxmean/2)
 
    estv=vyy

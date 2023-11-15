@@ -184,7 +184,8 @@ subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q)
      return
    endif
 
-   ! vectorize theta to vtheta
+   ! vectorize theta to vtheta and compute statistics
+
    ind=0 !index non-zero positions
    kk=0
    do k=1,ng-1
@@ -193,7 +194,13 @@ subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q)
        do t=jj+1,jj+group(j)
        do s=kk+1,kk+group(k) !t,s order determined the vectorization
          ind=ind+1
-         vtheta(ind)=theta(s,t)!vectorize the non-zero theta
+           !vectorize theta
+         vtheta(ind)=theta(s,t)
+           !compute statiatic
+         yy0(ind)=sum(y(:,s)*y(:,t)) ! for a given parameter, sum over all subjects
+         do ii=1,nsamp
+           yy(ii,ind)=sum(y(sample(ii,:,k),s)*y(sample(ii,:,j),t)) !sum over all subjects
+         enddo
        enddo
        enddo
        jj=jj+group(j)
@@ -201,49 +208,18 @@ subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q)
      kk=kk+group(k)
    enddo
 
-   ! compute statistics
-
-   myy=0
-   vyy=0
-   Do i=1,n
-     ind=0 !index non-zero positions
-     kk=0
-     do k=1,ng-1
-       jj=kk+group(k)
-       do j=(k+1),ng
-         do t=jj+1,jj+group(j)
-         do s=kk+1,kk+group(k) !t,s order determined the vectorization
-           ind=ind+1
-           yy0(ind)=y(i,s)*y(i,t)
-           do ii=1,nsamp
-             yy(ii,ind)=y(sample(ii,i,k),s)*y(sample(ii,i,j),t)
-           enddo
-         enddo
-         enddo
-         jj=jj+group(j)
-       enddo
-       kk=kk+group(k)
-     enddo
-
-     do k=1,q ! calculate scores and second derivatives
-       tmyy(k)=sum(yy(:,k))/nsamp
-       do j=1,k
-         vyy(k,j)=vyy(k,j)+sum(yy(:,k)*yy(:,j))/nsamp-tmyy(k)*tmyy(j)
-       enddo
-       myy(k)=myy(k)+tmyy(k)-yy0(k)
-     enddo
-
-   enddo
-
-   do k=2,q
-     do j=1,k-1
+   do k=1,q ! calculate scores and second derivatives
+     tmyy(k)=sum(yy(:,k))/nsamp 
+     do j=1,k
+       vyy(k,j)=sum(yy(:,k)*yy(:,j))/nsamp-tmyy(k)*tmyy(j)
        vyy(j,k)=vyy(k,j)
      enddo
+     myy(k)=yy0(k)-tmyy(k)
    enddo
 
    call PDmatinv(vyy,q) !perform submatrix inversion
 
-   vtheta=vtheta-matmul(vyy,myy) !one-step update
+   vtheta=vtheta+matmul(vyy,myy) !one-step update
 
  ! Laplace Apprx estimated variance is Sigma^(-1)exp(-theta*yxmean/2)
 
