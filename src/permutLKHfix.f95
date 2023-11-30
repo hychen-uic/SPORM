@@ -116,7 +116,7 @@ subroutine Analysiswmgfix(dat,n,p,group,ng,vtheta,estv,q,eps,converge,aveloglkh,
                if(network(s,t)/=0) then
                  mtheta=sum(theta2((irep-nlag+1):irep,s,t))/nlag
                  vartheta=sum(theta2((irep-nlag+1):irep,s,t)**2)/nlag
-                 vartheta=vartheta-mtheta**2
+                 vartheta=(vartheta-mtheta*mtheta)/(1+mtheta*mtheta) !! relative to the magnitude of theta estimate
                  if(vartheta>vmax) then
                    vmax=vartheta
                  endif

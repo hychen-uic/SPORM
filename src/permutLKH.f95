@@ -65,8 +65,6 @@ bind(C, name = "analysiswmg_")
    tcyc=maxcyc
    IT:do irep=1,niter
 
-     !write(*,*)irep,niter
-     !lowrate=ESS*1.0/(sintv*nsamp) !at least to have effective sample size 2000.
      if(irep<100) then
        lowrate=1e-5
      elseif(irep<200) then
@@ -95,7 +93,7 @@ bind(C, name = "analysiswmg_")
              do t=jj+1,jj+group(j)
                mtheta=sum(theta2((irep-nlag+1):irep,s,t))/nlag
                vartheta=sum(theta2((irep-nlag+1):irep,s,t)**2)/nlag
-               vartheta=vartheta-mtheta**2
+               vartheta=(vartheta-mtheta*mtheta)/(1+mtheta*mtheta) !! relative to the magnitude of theta estimate
                if(vartheta>vmax) then
                  vmax=vartheta
                endif

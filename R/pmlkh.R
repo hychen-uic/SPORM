@@ -66,11 +66,10 @@ pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
                as.integer(maxcyc), as.double(theta2))
 
   if(fit[[10]] == 0){print("Convergence criterion is not met")}
-  #print(fit[[6]])
-  #print(matrix(fit[[7]],ncol=nq))
-  #print(array(fit[[17]],c(niter,np,np)))
+
   if(plot==TRUE){
-    draw(array(fit[[17]], c(niter, np, np)))
+    paramhistory=array(fit[[17]], c(niter, np, np))
+    draw(paramhistory)
     }
   return(list(fit[[6]], matrix(fit[[7]], ncol = nq), fit[[16]]))
 }
