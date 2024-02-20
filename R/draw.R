@@ -17,9 +17,12 @@ draw <- function(x){
   p <- dim(x)[2]
   low <- min(x) * (1 + 0.2)
   upp=max(x) * (1 + 0.2)
-  plot(x = c(-35), y = c(45), xlim = c(0,n+5), ylim = c(low, upp),
+  plot(x = c(0), y = c(0), xlim = c(0,n+5), ylim = c(low, upp),
        xlab = "Number of Iterations",ylab="Odds Ratio Estimates")
   for(i in 2:p) {for(k in 1:(i-1)) {
-    lines(c(1:n), x[1:n, i, k], type = "l", col = 'red')
+    len=length(subset(x[1:n,i,k],x[1:n,i,k]!=0)) # non-zero part
+    if(len>0){
+      lines(c(1:len), x[1:len, i, k], type = "l", col = 'red')
+    }
   }}
 }
