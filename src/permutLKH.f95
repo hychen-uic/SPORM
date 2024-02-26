@@ -44,7 +44,7 @@ bind(C, name = "analysiswmg_")
 
    ind=0 !matrize vtheta to matrix theta
    kk=0
-   theta=0 !initialize theta, not all components of theta will be updated
+   !theta=0 ! uninitialize theta allows nonzero input. initialize theta, not all components of theta will be updated
    do k=1,ng-1
      jj=kk+group(k)
      do j=(k+1),ng

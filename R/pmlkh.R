@@ -22,6 +22,8 @@
 #' @param nintv the sampling interval (number of steps ignored) in the MCMC chain, default nintv=2e2.
 #' @param maxcyc the maximum step size (cycle of the permutation) in obtaining a candidate permutation
 #'        (change from the previous one) in the Gibbs sampling, default maxcyc=2.
+#' @param inparm indicate whether theta is initialized in the input
+#' @param theta provide theta value if theta is initialized.
 #'
 #' @details This method maximizes the permutation likelihood to obtain the parameter estimator
 #'          and uses the inverse of the permutation likelihood information matrix to estimate
@@ -43,7 +45,7 @@
 #'
 #' @export
 pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
-                  nburnin = 5e4, nsamp = 1e5, nintv = 5e1, maxcyc = 2) {
+                  nburnin = 5e4, nsamp = 1e5, nintv = 5e1, maxcyc = 2, inparm=FALSE, theta=0) {
   n <- dim(dat)[1]
   np <- dim(dat)[2]
   ng <- length(group)
@@ -51,11 +53,13 @@ pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
   for(k in 1:ng){
     nq <- nq - group[k] * (group[k] - 1)/2
   } # nq=total number of parameters from blocks.
-
-  theta <- rep(0, nq)
+  theta2 <- array(0, c(niter, np, np))
   estv <- matrix(0, nrow = nq, ncol = nq)
 
-  theta2 <- array(0, c(niter, np, np))
+  if(inparm==FALSE){theta <- rep(0, nq)} #Redefine theta if not initialized.
+  if(length(theta)!=nq){print("Incorrect theta length"); return()} # check initialized theta has correct length
+  
+
   converge <- 0
 
   fit <- .Fortran("analysiswmg", as.double(dat), as.integer(n), as.integer(np),

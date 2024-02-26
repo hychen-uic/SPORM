@@ -14,7 +14,9 @@ pmlkh(
   nburnin = 50000,
   nsamp = 1e+05,
   nintv = 50,
-  maxcyc = 2
+  maxcyc = 2,
+  inparm = FALSE,
+  theta = 0
 )
 }
 \arguments{
@@ -40,6 +42,10 @@ iterations for terminating the iteration.}
 
 \item{maxcyc}{the maximum step size (cycle of the permutation) in obtaining a candidate permutation
 (change from the previous one) in the Gibbs sampling, default maxcyc=2.}
+
+\item{inparm}{indicate whether theta is initialized in the input}
+
+\item{theta}{provide theta value if theta is initialized.}
 }
 \value{
 Estimate of the model parameters (column-wise vectorization) and
