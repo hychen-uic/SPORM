@@ -24,7 +24,9 @@
 #'        (change from the previous one) in the Gibbs sampling, default maxcyc=2.
 #' @param inparm indicate whether theta is initialized in the input
 #' @param theta provide theta value if theta is initialized.
-#'
+#' @param steplen two-stage controls step length of the parameter update,steplen=1 means no control, steplen<1 means control.
+#'        This parameter is set to make convergence more stable. the first component of steplen controls the step size in 1 to 15 iterations, 
+#          the 2nd component of steplen controls the stepsize for the remaining iterations.
 #' @details This method maximizes the permutation likelihood to obtain the parameter estimator
 #'          and uses the inverse of the permutation likelihood information matrix to estimate
 #'          the asymptotic variance of the estimator.
@@ -37,15 +39,13 @@
 #' @references Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
 #'
 #' @examples \dontrun{
-#' n=200; p=10
-#' datmat=matrix(rnorm(n * p), ncol = p)
-#' vargroup=c(2, 3, 1, 4)
-#' pmlkh(dat=datmat, group=vargroup)
+#' pmlkh(dat=example, group=c(1,8))
+#' pmlkh(dat=example, group=rep(1,9),nburn=1000,niter=100,steplen=c(0.2,1))
 #' }
 #'
 #' @export
 pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
-                  nburnin = 5e4, nsamp = 1e5, nintv = 5e1, maxcyc = 2, inparm=FALSE, theta=0) {
+                  nburnin = 5e4, nsamp = 1e5, nintv = 5e1, maxcyc = 2, inparm=FALSE, theta=0,steplen=c(1,1)) {
   n <- dim(dat)[1]
   np <- dim(dat)[2]
   ng <- length(group)
@@ -67,7 +67,7 @@ pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
                as.double(estv), as.integer(nq), as.double(eps),
                as.integer(converge), as.integer(niter), as.integer(nlag),
                as.integer(nburnin), as.integer(nsamp), as.integer(nintv),
-               as.integer(maxcyc), as.double(theta2))
+               as.integer(maxcyc), as.double(theta2),as.double(steplen))
 
   if(fit[[10]] == 0){print("Convergence criterion is not met")}
 

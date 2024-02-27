@@ -11,7 +11,7 @@
     contains
 
 !######################################################################
-subroutine Analysiswmg(dat,n,p,group,ng,vtheta,estv,q,eps,converge,niter,nlag,burnin,nsamp,sintv,maxcyc,theta2) &
+subroutine Analysiswmg(dat,n,p,group,ng,vtheta,estv,q,eps,converge,niter,nlag,burnin,nsamp,sintv,maxcyc,theta2,steplen) &
 bind(C, name = "analysiswmg_")
  ! dat(n,p)=> outcomes and covariates
  ! ng==> the number of groups the p varaibles devided
@@ -21,6 +21,9 @@ bind(C, name = "analysiswmg_")
  ! burnin=> Gibbs sampler burnin runs
  ! nsamp=> sample size of the draws
  ! sintv=> interval between two sample draws
+ !    steplen: control the step length in the parameter update
+ !             steplen=1<=> no control; steplen<1 <=> shorten step size
+
 !   parameter(n=200,p=5,nstart=31,niter=50,allrep=100)
 !   parameter(burnin=500000,Nsamp=2000,Sintv=10000)
 
@@ -33,7 +36,7 @@ bind(C, name = "analysiswmg_")
    real(C_DOUBLE) dat(n,p)
    real(C_DOUBLE) theta(p,p),theta2(niter,p,p)
    real(C_DOUBLE) vtheta(q),estv(q,q),estv2(niter,q,q)  !q=p*(p-1)-sum_k group(k)(group(k)-1)/2
-   real(C_DOUBLE) mtheta,vartheta,vmax,eps,lowrate
+   real(C_DOUBLE) mtheta,vartheta,vmax,eps,lowrate,steplen(2),stepsize
 
    integer (C_INT) i,j,k,irep,kk,jj,s,t,last,ind,ESS
    integer (C_INT) sample(nsamp,n,ng)
@@ -44,7 +47,7 @@ bind(C, name = "analysiswmg_")
 
    ind=0 !matrize vtheta to matrix theta
    kk=0
-   !theta=0 ! uninitialize theta allows nonzero input. initialize theta, not all components of theta will be updated
+   theta=0 !initialize theta, not all components of theta will be updated
    do k=1,ng-1
      jj=kk+group(k)
      do j=(k+1),ng
@@ -65,6 +68,8 @@ bind(C, name = "analysiswmg_")
    tcyc=maxcyc
    IT:do irep=1,niter
 
+     !write(*,*)irep,niter
+     !lowrate=ESS*1.0/(sintv*nsamp) !at least to have effective sample size 2000.
      if(irep<100) then
        lowrate=1e-5
      elseif(irep<200) then
@@ -75,7 +80,13 @@ bind(C, name = "analysiswmg_")
 
      Call MSPwmg(dat,n,p,group,ng,theta,sample,nsamp,burnin,sintv,maxcyc,tcyc,lowrate)
      maxcyc=maxval(tcyc) !adaptive steps sizes for sampling.
-     Call LAwmg(dat,n,p,group,ng,sample,nsamp,theta,estv,q)
+     if(irep<15) then
+       stepsize=steplen(1)
+     else
+       stepsize=steplen(2)
+     endif
+
+     Call LAwmg(dat,n,p,group,ng,sample,nsamp,theta,estv,q,stepsize)
 
     ! write(5,10)irep,((theta(k,j),k=1,j-1),j=2,p)
     ! 10 format(1x,I5, 2x, 100(f12.4,2x))
@@ -93,7 +104,7 @@ bind(C, name = "analysiswmg_")
              do t=jj+1,jj+group(j)
                mtheta=sum(theta2((irep-nlag+1):irep,s,t))/nlag
                vartheta=sum(theta2((irep-nlag+1):irep,s,t)**2)/nlag
-               vartheta=(vartheta-mtheta*mtheta)/(1+mtheta*mtheta) !! relative to the magnitude of theta estimate
+               vartheta=vartheta-mtheta**2
                if(vartheta>vmax) then
                  vmax=vartheta
                endif
@@ -154,9 +165,11 @@ end subroutine Analysiswmg
 !-------------------------------------------------------------
 ! 1.4. Laplace approximation for multiple groups of outcomes
 !-------------------------------------------------------------
-subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q)
+subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q,stepsize)
    !q=> total number of parameters to be estimated.
    !    q=p(p-1)/2-sumwk {group(k)(group(k)-1)/2}
+   !    steplen: control the step length in the parameter update
+   !             steplen=1<=> no control; steplen<1 <=> shorten step size
 
    implicit none
    integer, parameter:: dp = selected_real_kind(15, 307)
@@ -172,6 +185,7 @@ subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q)
    real(kind=dp) vtheta(q) ! vectorized block means
 
    integer i,j,k,ii,jj,kk,m,s,t
+   real(kind=dp) stepsize
 
    m=p*(p-1)/2
    do j=1,ng
@@ -217,7 +231,7 @@ subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q)
 
    call PDmatinv(vyy,q) !perform submatrix inversion
 
-   vtheta=vtheta+matmul(vyy,myy) !one-step update
+   vtheta=vtheta+stepsize*matmul(vyy,myy) !one-step update
 
  ! Laplace Apprx estimated variance is Sigma^(-1)exp(-theta*yxmean/2)
 

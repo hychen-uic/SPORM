@@ -16,7 +16,8 @@ pmlkh(
   nintv = 50,
   maxcyc = 2,
   inparm = FALSE,
-  theta = 0
+  theta = 0,
+  steplen = c(1, 1)
 )
 }
 \arguments{
@@ -46,6 +47,9 @@ iterations for terminating the iteration.}
 \item{inparm}{indicate whether theta is initialized in the input}
 
 \item{theta}{provide theta value if theta is initialized.}
+
+\item{steplen}{two-stage controls step length of the parameter update,steplen=1 means no control, steplen<1 means control.
+This parameter is set to make convergence more stable. the first component of steplen controls the step size in 1 to 15 iterations,}
 }
 \value{
 Estimate of the model parameters (column-wise vectorization) and
@@ -64,10 +68,8 @@ of permutations with non-constant weights (probability).
 }
 \examples{
 \dontrun{
-n=200; p=10
-datmat=matrix(rnorm(n * p), ncol = p)
-vargroup=c(2, 3, 1, 4)
-pmlkh(dat=datmat, group=vargroup)
+pmlkh(dat=example, group=c(1,8))
+pmlkh(dat=example, group=rep(1,9),nburn=1000,niter=100,steplen=c(0.2,1))
 }
 
 }
