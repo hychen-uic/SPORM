@@ -94,7 +94,7 @@ bind(C, name = "analysiswmg_")
      theta2(irep,:,:)=theta
      estv2(irep,:,:)=estv
 
-     if(irep>=max(nlag,25)) then ! check convergence
+     if(irep>=(nlag+20)) then ! check convergence
        vmax=0
        kk=0
        do k=1,ng-1
