@@ -105,8 +105,8 @@ bind(C, name = "analysiswmg_")
                mtheta=sum(theta2((irep-nlag+1):irep,s,t))/nlag
                vartheta=sum(theta2((irep-nlag+1):irep,s,t)**2)/nlag
                vartheta=vartheta-mtheta**2
-               if(vartheta>vmax) then
-                 vmax=vartheta
+               if(vartheta/(1+mtheta*mtheta)>vmax) then
+                 vmax=vartheta/(1+mtheta*mtheta)
                endif
              enddo
            enddo
