@@ -11,6 +11,6 @@ draw(x)
 }
 \description{
 This function is used to draw the progression of the parameter estimates
-in the iterations of the permutation likelihood approach to monitor the convergence
-of the parameter estimates.
+in the iterations of the permutation likelihood approach to monitor the
+convergence of the parameter estimates.
 }
