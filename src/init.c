@@ -7,9 +7,9 @@
 
 // .Fortran calls
 extern void F77_NAME(analysiswmg)(void *, void *, void *, void *, void *, void *, void *, void *,void *,
-                                  void *, void *, void *, void *, void *, void *, void *, void *, void *);
-extern void F77_NAME(analysiswmgfix)(void *, void *, void *, void *, void *, void *, void *, void *,void *, 
-                                     void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+                                  void *, void *, void *, void *, void *, void *, void *, void *, void *,void *);
+extern void F77_NAME(analysiswmgfix)(void *, void *, void *, void *, void *, void *, void *, void *,void *, void *,
+                                     void *, void *, void *, void *, void *, void *, void *, void *, void *, void *,void *);
 extern void F77_NAME(networkselectbypm)(void *, void *, void *, void *, void *, void *, void *, void *,
                                         void *, void *, void *, void *, void *, void *);
 extern void F77_NAME(pwmlecol)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
@@ -25,8 +25,8 @@ extern void F77_NAME(ormlerowfix)(void *, void *, void *, void *, void *, void *
 extern void F77_NAME(networkselectbysp)(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 
 static const R_FortranMethodDef FortranEntries[] = {
-  {"analysiswmg", (DL_FUNC) &F77_NAME(analysiswmg), 18},
-  {"analysiswmgfix", (DL_FUNC) &F77_NAME(analysiswmgfix), 19},
+  {"analysiswmg", (DL_FUNC) &F77_NAME(analysiswmg), 19},
+  {"analysiswmgfix", (DL_FUNC) &F77_NAME(analysiswmgfix), 21},
   {"networkselectbypm", (DL_FUNC) &F77_NAME(networkselectbypm), 14},
   {"pwmlecol", (DL_FUNC) &F77_NAME(pwmlecol), 10},
   {"pwmlerow", (DL_FUNC) &F77_NAME(pwmlerow), 10},

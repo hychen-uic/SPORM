@@ -24,9 +24,12 @@
 #'        (change from the previous one) in the Gibbs sampling, default maxcyc=2.
 #' @param inparm indicate whether theta is initialized in the input
 #' @param theta provide theta value if theta is initialized.
-#' @param steplen two-stage controls step length of the parameter update,steplen=1 means no control, steplen<1 means control.
-#'        This parameter is set to make convergence more stable. the first component of steplen controls the step size in 1 to 15 iterations, 
-#          the 2nd component of steplen controls the stepsize for the remaining iterations.
+#' @param steplen two-stage controls step length of the parameter update,steplen=1 means no control,
+#'       steplen<1 means control.This parameter is set to make convergence more stable. the first
+#'       component of steplen controls the step size in 1 to nstep iterations, the 2nd component
+#'       of steplen controls the stepsize for the remaining iterations.
+#' @param nstep controls the number of steps before a change of the step size occurs
+#'
 #' @details This method maximizes the permutation likelihood to obtain the parameter estimator
 #'          and uses the inverse of the permutation likelihood information matrix to estimate
 #'          the asymptotic variance of the estimator.
@@ -45,7 +48,8 @@
 #'
 #' @export
 pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
-                  nburnin = 5e4, nsamp = 1e5, nintv = 5e1, maxcyc = 2, inparm=FALSE, theta=0,steplen=c(1,1)) {
+                  nburnin = 5e4, nsamp = 1e5, nintv = 5e1, maxcyc = 2,
+                  inparm=FALSE, theta=0,steplen=c(1,1),nstep=15) {
   n <- dim(dat)[1]
   np <- dim(dat)[2]
   ng <- length(group)
@@ -58,7 +62,7 @@ pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
 
   if(inparm==FALSE){theta <- rep(0, nq)} #Redefine theta if not initialized.
   if(length(theta)!=nq){print("Incorrect theta length"); return()} # check initialized theta has correct length
-  
+
 
   converge <- 0
 
@@ -67,7 +71,8 @@ pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
                as.double(estv), as.integer(nq), as.double(eps),
                as.integer(converge), as.integer(niter), as.integer(nlag),
                as.integer(nburnin), as.integer(nsamp), as.integer(nintv),
-               as.integer(maxcyc), as.double(theta2),as.double(steplen))
+               as.integer(maxcyc), as.double(theta2),
+               as.double(steplen),as.integer(nstep))
 
   if(fit[[10]] == 0){print("Convergence criterion is not met")}
 

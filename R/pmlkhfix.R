@@ -28,6 +28,11 @@
 #' @param nintv the sampling interval (number of steps ignored) in the MCMC chain, default nintv = 2e2.
 #' @param maxcyc the maximum step size (cycle of the permutation) in obtaining a candidate permutation
 #'        (change from the previous one) in the Gibbs sampling, default maxcyc = 2.
+#' @param steplen two-stage controls step length of the parameter update,steplen=1 means no control,
+#'       steplen<1 means control.This parameter is set to make convergence more stable. the first
+#'       component of steplen controls the step size in 1 to nstep iterations, the 2nd component
+#'       of steplen controls the stepsize for the remaining iterations.
+#' @param nstep controls the number of steps before a change of the step size occurs
 #'
 #' @details This method maximizes the permutation likelihood to obtain the parameter estimator
 #'          and uses the inverse of the permutation information matrix
@@ -51,7 +56,8 @@
 #'
 #' @export
 pmlkhfix <- function(dat, group, fixstruct, niter = 50, eps = 1e-2, nlag = 20,
-                     nburnin = 5e4, nsamp = 1e5, nintv = 5e1, maxcyc = 2) {
+                     nburnin = 5e4, nsamp = 1e5, nintv = 5e1, maxcyc = 2,
+                     steplen=c(1,1),nstep=15) {
   n <- dim(dat)[1]
   np <- dim(dat)[2]
   ng <- length(group)
@@ -72,7 +78,7 @@ pmlkhfix <- function(dat, group, fixstruct, niter = 50, eps = 1e-2, nlag = 20,
                   as.integer(converge), as.double(loglkh), as.integer(fixstruct),
                   as.integer(niter), as.integer(nlag), as.integer(nburnin),
                   as.integer(nsamp), as.integer(nintv), as.integer(maxcyc),
-                  as.double(theta2))
+                  as.double(theta2),as.double(steplen),as.integer(nstep))
 
   if(fit[[10]] == 0) {print("Convergence criterion is not met")}
 

@@ -17,7 +17,8 @@ pmlkh(
   maxcyc = 2,
   inparm = FALSE,
   theta = 0,
-  steplen = c(1, 1)
+  steplen = c(1, 1),
+  nstep = 15
 )
 }
 \arguments{
@@ -48,8 +49,12 @@ iterations for terminating the iteration.}
 
 \item{theta}{provide theta value if theta is initialized.}
 
-\item{steplen}{two-stage controls step length of the parameter update,steplen=1 means no control, steplen<1 means control.
-This parameter is set to make convergence more stable. the first component of steplen controls the step size in 1 to 15 iterations,}
+\item{steplen}{two-stage controls step length of the parameter update,steplen=1 means no control,
+steplen<1 means control.This parameter is set to make convergence more stable. the first
+component of steplen controls the step size in 1 to nstep iterations, the 2nd component
+of steplen controls the stepsize for the remaining iterations.}
+
+\item{nstep}{controls the number of steps before a change of the step size occurs}
 }
 \value{
 Estimate of the model parameters (column-wise vectorization) and

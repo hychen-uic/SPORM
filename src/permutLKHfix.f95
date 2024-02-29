@@ -13,7 +13,8 @@
 
 !######################################################################
 subroutine Analysiswmgfix(dat,n,p,group,ng,vtheta,estv,q,eps,converge,aveloglkh,network, &
-                          niter,nlag,burnin,nsamp,sintv,maxcyc,theta2) bind(C, name = "analysiswmgfix_")
+                          niter,nlag,burnin,nsamp,sintv,maxcyc,theta2,steplen,nstep) &
+                          bind(C, name = "analysiswmgfix_")
  ! dat(n,p)=> outcomes and covariates
  ! ng==> the number of groups the p varaibles devided
  ! group==>group(np): the number of components in each group. Sum(group)=p
@@ -24,7 +25,10 @@ subroutine Analysiswmgfix(dat,n,p,group,ng,vtheta,estv,q,eps,converge,aveloglkh,
  ! nsamp=> sample size of the draws
  ! sintv=> interval between two sample draws
  !  parameter(n=200,p=5,nstart=31,niter=50,allrep=100)
- !  parameter(burnin=500000,Nsamp=2000,Sintv=10000)
+ !  parameter(burnin=5000,Nsamp=2000,Sintv=100)
+ ! steplen=> control the step length in the parameter update
+ !             steplen=1<=> no control; steplen<1 <=> shorten step size
+ ! nstep=> control the number of steps before a change of the step size occurs 
 
    implicit none
    ! integer, parameter:: dp = selected_real_kind(15, 307)
@@ -37,9 +41,9 @@ subroutine Analysiswmgfix(dat,n,p,group,ng,vtheta,estv,q,eps,converge,aveloglkh,
    real(C_DOUBLE) aveloglkh,loglkh(niter)
    real(C_DOUBLE) vtheta(q),estv(q,q),estv2(niter,q,q)  !q=p*(p-1)-sum_k group(k)(group(k)-1)/2
 
-   integer (C_INT) i,j,k,irep,jj,kk,s,t,last,ind,count
+   integer (C_INT) i,j,k,irep,jj,kk,s,t,last,ind,count,nstep
    integer (C_INT) sample(nsamp,n,ng),tcyc(ng-1)
-   real (C_DOUBLE) mtheta,vartheta,vmax,eps,lowrate
+   real (C_DOUBLE) mtheta,vartheta,vmax,eps,lowrate,steplen(2),stepsize
 
    do i=1,n  !initialize
      sample(1:nsamp,i,1:ng)=i
@@ -94,9 +98,14 @@ subroutine Analysiswmgfix(dat,n,p,group,ng,vtheta,estv,q,eps,converge,aveloglkh,
 
     ! write(*,*)irep,niter
      Call MSPwmgfix(dat,n,p,group,ng,network,theta,sample,nsamp,burnin,sintv,maxcyc,tcyc,lowrate)
-     maxcyc=maxval(tcyc) !adaptive steps sizes for sampling.
 
-     Call LAwmgfix(dat,n,p,group,ng,network,sample,nsamp,theta,estv,q)
+     maxcyc=maxval(tcyc) !adaptive steps sizes for sampling.
+     if(irep<nstep) then
+       stepsize=steplen(1)
+     else
+       stepsize=steplen(2)
+     endif
+     Call LAwmgfix(dat,n,p,group,ng,network,sample,nsamp,theta,estv,q,stepsize)
      theta2(irep,:,:)=theta
      estv2(irep,:,:)=estv
 
@@ -239,7 +248,7 @@ subroutine permlkh(y,n,p,group,ng,network,sample,nsamp,theta,loglkh)
 !-------------------------------------------------------------
 ! 1.4. Laplace approximation for multiple groups of outcomes
 !-------------------------------------------------------------
-subroutine LAwmgfix(y,n,p,group,ng,network,sample,nsamp,theta,estv,q)
+subroutine LAwmgfix(y,n,p,group,ng,network,sample,nsamp,theta,estv,q,stepsize)
    !q=> total number of parameters to be estimated.
    !    q=p(p-1)/2-sumwk {group(k)(group(k)-1)/2}
 
@@ -257,6 +266,7 @@ subroutine LAwmgfix(y,n,p,group,ng,network,sample,nsamp,theta,estv,q)
    real(kind=dp) vtheta(q) ! vectorized block means
 
    integer i,j,k,ii,jj,kk,m,s,t
+   real(kind=dp) stepsize
 
    m=p*(p-1)/2
    do j=1,ng
@@ -309,7 +319,7 @@ subroutine LAwmgfix(y,n,p,group,ng,network,sample,nsamp,theta,estv,q)
 
    call PDmatinvfix(vyy,vnet,q) !perform submatrix inversion
 
-   vtheta=vtheta+matmul(vyy,myy) !one-step update
+   vtheta=vtheta+stepsize*matmul(vyy,myy) !one-step update
  ! Laplace Apprx estimated variance is Sigma^(-1)exp(-theta*yxmean/2)
 
    estv=vyy

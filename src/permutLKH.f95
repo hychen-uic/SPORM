@@ -11,8 +11,8 @@
     contains
 
 !######################################################################
-subroutine Analysiswmg(dat,n,p,group,ng,vtheta,estv,q,eps,converge,niter,nlag,burnin,nsamp,sintv,maxcyc,theta2,steplen) &
-bind(C, name = "analysiswmg_")
+subroutine Analysiswmg(dat,n,p,group,ng,vtheta,estv,q,eps,converge,niter,nlag,burnin,nsamp, &
+                       sintv,maxcyc,theta2,steplen,nstep) bind(C, name = "analysiswmg_")
  ! dat(n,p)=> outcomes and covariates
  ! ng==> the number of groups the p varaibles devided
  ! group==>group(np): the number of components in each group. Sum(group)=p
@@ -21,8 +21,9 @@ bind(C, name = "analysiswmg_")
  ! burnin=> Gibbs sampler burnin runs
  ! nsamp=> sample size of the draws
  ! sintv=> interval between two sample draws
- !    steplen: control the step length in the parameter update
+ ! steplen=> control the step length in the parameter update
  !             steplen=1<=> no control; steplen<1 <=> shorten step size
+ ! nstep=> control the number of steps before a change of the step size occurs 
 
 !   parameter(n=200,p=5,nstart=31,niter=50,allrep=100)
 !   parameter(burnin=500000,Nsamp=2000,Sintv=10000)
@@ -30,7 +31,7 @@ bind(C, name = "analysiswmg_")
    implicit none
    !integer, parameter:: dp = selected_real_kind(15, 307)
 
-   integer (C_INT) n,p,ng,q,converge,niter,nlag,burnin,nsamp,sintv,maxcyc
+   integer (C_INT) n,p,ng,q,converge,niter,nlag,burnin,nsamp,sintv,maxcyc,nstep
    integer (C_INT) group(ng),tcyc(ng-1)
 
    real(C_DOUBLE) dat(n,p)
@@ -80,12 +81,12 @@ bind(C, name = "analysiswmg_")
 
      Call MSPwmg(dat,n,p,group,ng,theta,sample,nsamp,burnin,sintv,maxcyc,tcyc,lowrate)
      maxcyc=maxval(tcyc) !adaptive steps sizes for sampling.
-     if(irep<15) then
+
+     if(irep<nstep) then
        stepsize=steplen(1)
      else
        stepsize=steplen(2)
      endif
-
      Call LAwmg(dat,n,p,group,ng,sample,nsamp,theta,estv,q,stepsize)
 
     ! write(5,10)irep,((theta(k,j),k=1,j-1),j=2,p)

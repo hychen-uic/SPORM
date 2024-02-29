@@ -14,7 +14,9 @@ pmlkhfix(
   nburnin = 50000,
   nsamp = 1e+05,
   nintv = 50,
-  maxcyc = 2
+  maxcyc = 2,
+  steplen = c(1, 1),
+  nstep = 15
 )
 }
 \arguments{
@@ -41,6 +43,13 @@ iterations for terminating the iteration.}
 
 \item{maxcyc}{the maximum step size (cycle of the permutation) in obtaining a candidate permutation
 (change from the previous one) in the Gibbs sampling, default maxcyc = 2.}
+
+\item{steplen}{two-stage controls step length of the parameter update,steplen=1 means no control,
+steplen<1 means control.This parameter is set to make convergence more stable. the first
+component of steplen controls the step size in 1 to nstep iterations, the 2nd component
+of steplen controls the stepsize for the remaining iterations.}
+
+\item{nstep}{controls the number of steps before a change of the step size occurs}
 }
 \value{
 Estimate of the model parameters (column-wise vectorization) and
