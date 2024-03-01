@@ -11,7 +11,8 @@ pmlkhfix(
   niter = 50,
   eps = 0.01,
   nlag = 20,
-  nburnin = 50000,
+  plot = TRUE,
+  nburnin = 5000,
   nsamp = 1e+05,
   nintv = 50,
   maxcyc = 2,
@@ -34,6 +35,8 @@ or parameter to be estimated (1).}
 iterations for terminating the iteration.}
 
 \item{nlag}{the averaged parameter values in the sequence to assess convergence, default nlag = 20.}
+
+\item{plot}{Default is TRUE, to produce the convergence plot. If FALSE, suppress the plot.}
 
 \item{nburnin}{the burnin steps before a sample is taken, default nburnin=5e4.}
 
