@@ -3,7 +3,7 @@
 \docType{data}
 \name{example}
 \alias{example}
-\title{Example data set}
+\title{Simulated data set}
 \format{
 A data matrix with 400 records and 9 variables.
 }
@@ -14,6 +14,7 @@ simulated data
 example
 }
 \description{
-Example data is a 400x9 matrix to test the function within the package.
+Example simulated data is a 400x9 matrix to test the function
+within the package.
 }
 \keyword{datasets}

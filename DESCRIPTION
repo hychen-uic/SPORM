@@ -16,6 +16,7 @@ Roxygen: list(markdown = TRUE)
 Collate: 
     'SPORM-package.R'
     'example.R'
+    'bone.R'
     'draw.R'
     'pmlkh.R'
     'pmlkhfix.R'
