@@ -15,6 +15,11 @@
 #'            iterations for terminating the iteration.
 #' @param vect methods of vectorization of parameter matrix.
 #'        Either column-wise (vect='col') or row-wise (vect='row').
+#' @param steplen two-stage controls step length of the parameter update,steplen=1 means no control,
+#'       steplen<1 means control.This parameter is set to make convergence more stable. the first
+#'       component of steplen controls the step size in 1 to nstep iterations, the 2nd component
+#'       of steplen controls the stepsize for the remaining iterations.
+#' @param nstep controls the number of steps before a change of the step size occurs
 #'
 #' @details This method maximizes the pairwise likelihood to obtain the parameter estimator
 #'          and uses U-statistic theory to estimate the asymptotic variance of the estimator.
@@ -49,7 +54,7 @@
 #' }
 #'
 #' @export
-pwlkh <- function(y, x, niter = 50, eps = 1e-6, vect = "col") {
+pwlkh <- function(y, x, niter = 50, eps = 1e-6, vect = "col",steplen=c(0.5,1),nstep=10) {
 
   if (is.matrix(y) == TRUE) {
     n <- dim(y)[1]
@@ -72,11 +77,11 @@ pwlkh <- function(y, x, niter = 50, eps = 1e-6, vect = "col") {
   if (vect == "col"){
     fit <- .Fortran("pwmlecol", as.double(y), as.double(x), as.integer(n), as.integer(np),
                     as.integer(nq), as.double(theta), as.double(estv),
-                    as.integer(niter), as.double(eps), as.integer(converge))
+                    as.integer(niter), as.double(eps), as.integer(converge),as.double(steplen), as.integer(nstep))
   } else {
     fit <- .Fortran("pwmlerow", as.double(y), as.double(x), as.integer(n), as.integer(np),
                     as.integer(nq), as.double(theta), as.double(estv),
-                    as.integer(niter), as.double(eps), as.integer(converge))
+                    as.integer(niter), as.double(eps), as.integer(converge),as.double(steplen), as.integer(nstep))
   }
 
   if(fit[[10]] == 0) {print("Convergence criterion is not met")}

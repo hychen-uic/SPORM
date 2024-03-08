@@ -13,7 +13,7 @@
 !  parameter gam is vectorized by column.
 !-------------------------------------------
 
-subroutine pwMLECOL(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwmlecol_")
+subroutine pwMLECOL(y,x,n,p,q,theta,estv,niter,eps,converge,steplen,nstep) bind(C, name = "pwmlecol_")
 
   implicit none
   !integer, parameter:: dp = selected_real_kind(15, 307)
@@ -26,7 +26,8 @@ subroutine pwMLECOL(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
   real (C_DOUBLE)  temp(q,p),probtemp
   real (C_DOUBLE)  der(p*q),der2(p*q,p*q),delta(p*q),eps
 
-  real (C_DOUBLE)  tder(n,p*q)
+  real (C_DOUBLE)  tder(n,p*q),steplen(2),stepsize
+  integer(C_INT) nstep
 
   converge=0
   do irep=1,niter
@@ -128,7 +129,12 @@ subroutine pwMLECOL(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
       estv=estv/n ! variance for the estimate
       exit
     else
-      theta=theta-delta
+      if(irep<nstep) then
+        stepsize=steplen(1)
+      else
+        stepsize=steplen(2)
+      endif
+      theta=theta-stepsize*delta
     endif
 
   enddo
@@ -138,7 +144,7 @@ end subroutine pwMLECOL
 !  pairwise likelihood approach
 !  parameter gam is vectorized by row.
 !-------------------------------------------
-subroutine pwMLErow(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwmlerow_")
+subroutine pwMLErow(y,x,n,p,q,theta,estv,niter,eps,converge,steplen,nstep) bind(C, name = "pwmlerow_")
 
   implicit none
   ! integer, parameter:: dp = selected_real_kind(15, 307)
@@ -152,7 +158,8 @@ subroutine pwMLErow(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
   real (C_DOUBLE)  temp(p,q),probtemp
   real (C_DOUBLE)  der(p*q),der2(p*q,p*q),delta(p*q),eps
 
-  real (C_DOUBLE)  tder(n,p*q)
+  real (C_DOUBLE)  tder(n,p*q),steplen(2),stepsize
+  integer(C_INT) nstep
 
   converge=0
   do irep=1,niter
@@ -256,7 +263,12 @@ subroutine pwMLErow(y,x,n,p,q,theta,estv,niter,eps,converge) bind(C, name = "pwm
       estv=estv/n ! variance for the estimate
       exit
     else
-      theta=theta-delta
+      if(irep<nstep) then
+        stepsize=steplen(1)
+      else
+        stepsize=steplen(2)
+      endif
+      theta=theta-stepsize*delta
     endif
 
   enddo

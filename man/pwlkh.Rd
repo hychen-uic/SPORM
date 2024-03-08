@@ -4,7 +4,15 @@
 \alias{pwlkh}
 \title{The simple pairwise pseudo-likelihood approach}
 \usage{
-pwlkh(y, x, niter = 50, eps = 1e-06, vect = "col")
+pwlkh(
+  y,
+  x,
+  niter = 50,
+  eps = 1e-06,
+  vect = "col",
+  steplen = c(0.5, 1),
+  nstep = 10
+)
 }
 \arguments{
 \item{y}{outcomes: can be a vector of length n or a matrix of nxq dimension.}
@@ -18,6 +26,13 @@ iterations for terminating the iteration.}
 
 \item{vect}{methods of vectorization of parameter matrix.
 Either column-wise (vect='col') or row-wise (vect='row').}
+
+\item{steplen}{two-stage controls step length of the parameter update,steplen=1 means no control,
+steplen<1 means control.This parameter is set to make convergence more stable. the first
+component of steplen controls the step size in 1 to nstep iterations, the 2nd component
+of steplen controls the stepsize for the remaining iterations.}
+
+\item{nstep}{controls the number of steps before a change of the step size occurs}
 }
 \value{
 Estimate of the model parameters (vectorized) and
