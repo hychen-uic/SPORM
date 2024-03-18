@@ -169,8 +169,6 @@ end subroutine Analysiswmg
 subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q,stepsize)
    !q=> total number of parameters to be estimated.
    !    q=p(p-1)/2-sumwk {group(k)(group(k)-1)/2}
-   !    steplen: control the step length in the parameter update
-   !             steplen=1<=> no control; steplen<1 <=> shorten step size
 
    implicit none
    integer, parameter:: dp = selected_real_kind(15, 307)
@@ -192,10 +190,10 @@ subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q,stepsize)
    do j=1,ng
      m=m-group(j)*(group(j)-1)/2
    enddo
-   if(m/=q) then
-     !write(*,*) 'dimension does not match, stop excute LAwmg.'
-     return
-   endif
+ !  if(m/=q) then
+ !    !write(*,*) 'dimension does not match, stop excute LAwmg.'
+ !    return
+ !  endif
 
    ! vectorize theta to vtheta and compute statistics
 

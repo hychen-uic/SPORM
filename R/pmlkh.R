@@ -62,7 +62,7 @@ pmlkh <- function(dat, group, niter = 50, eps = 1e-2,nlag = 20, plot=TRUE,
 
   if(inparm==FALSE){theta <- rep(0, nq)} #Redefine theta if not initialized.
   if(length(theta)!=nq){print("Incorrect theta length"); return()} # check initialized theta has correct length
-
+  if(dim(dat)[2]!=sum(group)){print("Incorrect group vector"); return()} # check group length matching with data dimension
 
   converge <- 0
 
