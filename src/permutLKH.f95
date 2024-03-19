@@ -70,7 +70,7 @@ subroutine Analysiswmg(dat,n,p,group,ng,vtheta,estv,q,eps,converge,niter,nlag,bu
    IT:do irep=1,niter
 
      !write(*,*)irep,niter
-     !lowrate=ESS*1.0/(sintv*nsamp) !at least to have effective sample size 2000.
+      
      if(irep<100) then
        lowrate=1e-5
      elseif(irep<200) then
@@ -87,6 +87,7 @@ subroutine Analysiswmg(dat,n,p,group,ng,vtheta,estv,q,eps,converge,niter,nlag,bu
      else
        stepsize=steplen(2)
      endif
+
      Call LAwmg(dat,n,p,group,ng,sample,nsamp,theta,estv,q,stepsize)
 
     ! write(5,10)irep,((theta(k,j),k=1,j-1),j=2,p)
@@ -190,11 +191,7 @@ subroutine LAwmg(y,n,p,group,ng,sample,nsamp,theta,estv,q,stepsize)
    do j=1,ng
      m=m-group(j)*(group(j)-1)/2
    enddo
- !  if(m/=q) then
- !    !write(*,*) 'dimension does not match, stop excute LAwmg.'
- !    return
- !  endif
-
+  
    ! vectorize theta to vtheta and compute statistics
 
    ind=0 !index non-zero positions
