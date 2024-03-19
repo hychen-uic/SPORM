@@ -56,6 +56,7 @@ subroutine Analysiswmg(dat,n,p,group,ng,vtheta,estv,q,eps,converge,niter,nlag,bu
        do s=kk+1,kk+group(k) !t,s order determined the vectorization
          ind=ind+1
          theta(s,t)=vtheta(ind) !matrize vtheta to theta
+         theta(t,s)=theta(s,t) 
        enddo
        enddo
        jj=jj+group(j)
