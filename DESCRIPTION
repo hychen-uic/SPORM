@@ -17,6 +17,7 @@ Collate:
     'SPORM-package.R'
     'example.R'
     'bone.R'
+    'cprob.R'
     'draw.R'
     'pmlkh.R'
     'pmlkhfix.R'
