@@ -70,14 +70,14 @@ cdimpute=function(dat=dat,miscode=c(-9),method="pw",niter=10){
             fit=pmlkh(cbind(impdat[,k],impdat[,setdiff(c(1:p),k)]),c(1,p-1))
           }
         }
-        print(fit[[1]])
+        #print(fit[[1]])
         base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=fit[[1]],fagg=TRUE)
-        print(base)
+        #print(base)
         len=length(a_cat)
         misset=order(misdat[,k])[1:a_freq[1]] # subset the locations of missing values
         subx=impdat[misset,setdiff(c(1:p),k)]
         pred=cprob(y=base[[2]],x=subx,parm=fit[[1]],F=base[[1]])
-        #print(dim(pred[[1]]));print(dim(subx))
+        #print(pred[[1]]);print(dim(subx))
         imp=rep(0,length(misset))
         for(j in 1:length(misset)){
           imp[j]=sample(x=base[[2]],prob=pred[[1]][,j],size=1)
