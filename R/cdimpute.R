@@ -4,6 +4,10 @@
 #'
 #' @param dat a data matrix with possible missing values
 #' @param miscode a set of values used for denoting missing values
+#' @param method specific method of estimation, can be
+#'        method='pw' for pairwise likelihood approach
+#'        method='sp' for semiparametric likelihood approach
+#'        method='pm' for permutation likelihood approach
 #' @param niter the number of iterations to produce the final imputed data set
 #'
 #' @details This function imputes missing data by random draw from
@@ -24,7 +28,7 @@
 #'@export
 #'
 
-cdimpute=function(dat=dat,miscode=c(-9),niter=10){
+cdimpute=function(dat=dat,miscode=c(-9),method="pw",niter=10){
   #1. Find the missing data indicators
   n=dim(dat)[1]
   p=dim(dat)[2]
@@ -57,10 +61,18 @@ cdimpute=function(dat=dat,miscode=c(-9),niter=10){
       a_cat=as.numeric(names(a))
       a_freq=as.numeric(a)
       if(sum(1-misdat[,k])>0){
-        fit=pwlkh(impdat[,k],impdat[,setdiff(c(1:p),k)])
+        if(method=='pw'){
+          fit=pwlkh(impdat[,k],impdat[,setdiff(c(1:p),k)])
+        }else{
+          if(method=='sp'){
+            fit=splkh(impdat[,k],impdat[,setdiff(c(1:p),k)])
+          }else{
+            fit=pmlkh(cbind(impdat[,k],impdat[,setdiff(c(1:p),k)]),c(1,p-1))
+          }
+        }
         print(fit[[1]])
         base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=fit[[1]],fagg=TRUE)
-
+        print(base)
         len=length(a_cat)
         misset=order(misdat[,k])[1:a_freq[1]] # subset the locations of missing values
         subx=impdat[misset,setdiff(c(1:p),k)]
