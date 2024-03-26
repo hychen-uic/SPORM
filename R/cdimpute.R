@@ -31,11 +31,10 @@ cdimpute=function(dat=dat,miscode=c(-9),niter=10){
   misdat=array(1,c(n,p))
   for(k in 1:length(miscode)){
     misdat=misdat-(dat==miscode[k])
-    } # missing data indicators
+  } # missing data indicators
 
   #2. Get the marginal frequencies and impute using random draws.
   impdat=dat
-
   for(k in 1:p){
     a=table(dat[,k])
     a_cat=as.numeric(names(a))
@@ -45,35 +44,38 @@ cdimpute=function(dat=dat,miscode=c(-9),niter=10){
       misset=order(misdat[,k])[1:a_freq[1]] # subset the locations of missing values
       imp=sample(x=a_cat[2:len],prob=a_freq[2:len]/sum(a_freq[2:len]),size=a_freq[1],replace=TRUE)
       impdat[misset,k]=imp # fill in the imputed values by random draws
-      }
     }
+  }
 
   #3. Get the conditional frequencies and impute using random draws.
   impdat=as.matrix(impdat)
   for(iter in 1:niter){
-#print(c(iter,iter,niter))
+    print(c(iter,iter,niter))
     for(k in 1:p){
+      print(c(k,k,p))
       a=table(dat[,k])
       a_cat=as.numeric(names(a))
       a_freq=as.numeric(a)
       if(sum(1-misdat[,k])>0){
-        fit=splkh(impdat[,k],impdat[,setdiff(c(1:p),k)])
+        fit=pwlkh(impdat[,k],impdat[,setdiff(c(1:p),k)])
+        print(fit[[1]])
         base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=fit[[1]],fagg=TRUE)
 
         len=length(a_cat)
         misset=order(misdat[,k])[1:a_freq[1]] # subset the locations of missing values
         subx=impdat[misset,setdiff(c(1:p),k)]
-        pred=cprob(y=a_cat[2:len],x=impdat[misset,setdiff(c(1:p),k)],parm=fit[[1]],F=base[[1]])
-#print(dim(pred[[1]]));print(dim(impdat[misset,setdiff(c(1:p),k)]))
+        pred=cprob(y=base[[2]],x=subx,parm=fit[[1]],F=base[[1]])
+        #print(dim(pred[[1]]));print(dim(subx))
         imp=rep(0,length(misset))
         for(j in 1:length(misset)){
-          imp[j]=sample(x=a_cat[2:len],prob=pred[[1]][,j],size=1)
+          imp[j]=sample(x=base[[2]],prob=pred[[1]][,j],size=1)
         }
         impdat[misset,k]=imp
-#        print(table(dat[,k]))
-#        print(table(impdat[,k]))
+        #        print(table(dat[,k]))
+        #        print(table(impdat[,k]))
       }
     }
   }
-return(list(impdat))
+  return(list(impdat))
 }
+

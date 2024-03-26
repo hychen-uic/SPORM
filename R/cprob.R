@@ -36,21 +36,16 @@ cprob=function(y,x,parm,F){
   # F: baseline function
   # pred: predictive probabilities corresponding to all possible y values.
   #
-
   if(is.vector(y)==TRUE){
-    n=length(y)
-    pred=rep(0,n)
-    # initial estimate uses weight
-    pred=exp(y*sum(x*parm))*F
-    pred=pred/sum(pred)
+    nrow=1
   }else{
-    # y is a matrix
-    pred=exp(y%*%matrix(parm,nrow=dim(y)[2])%*%t(x))
-    pred=pred%*%diag(1/apply(pred,2,sum))
+    nrow=dim(y)[2]
   }
 
- return(pred)
+  pred=diag(F)%*%exp(y%*%t(parm)%*%t(x))
+  pred=pred%*%diag(1/apply(pred,2,sum))
 
+  return(list(pred))
 }
 
 
