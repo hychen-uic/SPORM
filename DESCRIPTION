@@ -18,6 +18,8 @@ Collate:
     'example.R'
     'bone.R'
     'cprob.R'
+    'cdimpute.R'
+    'mdimpute.R'
     'draw.R'
     'pmlkh.R'
     'pmlkhfix.R'
