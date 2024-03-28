@@ -100,7 +100,7 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=10,nseq=10){
 
         imp=array(0,c(length(misset),nimpute))
         for(j in 1:length(misset)){
-          imp[j,]=sample(x=base[[2]],prob=pred[[1]][,j],size=nimpute)
+          imp[j,]=sample(x=base[[2]],prob=pred[[1]][,j],size=nimpute,replace=TRUE)
         }
         for(ni in 1:nimpute){
           dstart=(ni-1)*n+1
