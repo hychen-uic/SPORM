@@ -4,16 +4,18 @@
 \alias{mdimpute}
 \title{Impute missing values by random draw from the marginal distributions}
 \usage{
-mdimpute(dat = dat, miscode = c(-9))
+mdimpute(dat = dat, miscode = c(-9), nimpute = 5)
 }
 \arguments{
 \item{dat}{a data matrix with possible missing values}
 
 \item{miscode}{a set of values used for denoting missing values}
+
+\item{nimpute}{the number of copies of the imputed data}
 }
 \value{
 \enumerate{
-\item One imputed data set
+\item Imputed data set with the last variable indexing the datasets
 }
 }
 \description{
@@ -25,7 +27,8 @@ the marginal distribution of the respective variables
 }
 \examples{
 \dontrun{
- mdimpute(dat=bone,miss=c(-9))
+ fit=mdimpute(dat=bone,miss=c(-9))
+ fit[[1]]
 }
 
 }

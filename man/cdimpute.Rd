@@ -4,7 +4,7 @@
 \alias{cdimpute}
 \title{Impute missing values by random draw from the conditional distributions}
 \usage{
-cdimpute(dat = dat, miscode = c(-9), method = "pw", niter = 10)
+cdimpute(dat = dat, miscode = c(-9), method = "sp", niter = 10, nimpute = 5)
 }
 \arguments{
 \item{dat}{a data matrix with possible missing values}
@@ -17,6 +17,8 @@ method='sp' for semiparametric likelihood approach
 method='pm' for permutation likelihood approach}
 
 \item{niter}{the number of iterations to produce the final imputed data set}
+
+\item{nimpute}{the number of imputed copies for each missing value}
 }
 \value{
 \enumerate{
