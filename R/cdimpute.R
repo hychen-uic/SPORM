@@ -99,9 +99,8 @@ cdimpute=function(dat=dat,miscode=c(-9),method="sp",niter=10,nimpute=5){
          theta=c(theta,fit[[1]][k:(p-1)])
          }}
      }
-     print(c(min(theta),max(theta)))
   }
-
+  print(c(min(theta),max(theta)))
   return(list(impdat,theta))
 }
 

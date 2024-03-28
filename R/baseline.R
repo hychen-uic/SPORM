@@ -53,25 +53,27 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
     n=length(y)
     F=rep(0,n)
     # initial estimate uses weight
-    F=exp(-y*as.vector(x%*%parm))
-    F=F/sum(F)
+    top=-y*as.vector(x%*%parm)
+    maxtop=max(top)
+    F=exp(top-maxtop)
   }else{
     # initial estimate uses weight
-    F=diag(exp(y%*%matrix(parm,nrow=dim(y)[2])%*%t(x)))
-    #n=dim(y)[1]
-    #F=rep(0,n)
-    #for(i in 1:n){
-    #  F[i]=exp(-as.numeric(y[i,]%*%parm%*%x[i,]))
-    #  }
-    F=F/sum(F)
+    top=-y%*%matrix(parm,nrow=dim(y)[2])%*%t(x)
+    maxtop=max(top)
+    F=diag(exp(top-maxtop))
   }
+  F=F/sum(F)
 
   if(method=="iterate"){
     for(i in 1:50){
       if(is.vector(parm)==TRUE){
-        new=exp(y%*%t(parm)%*%t(x))
+        top=y%*%t(parm)%*%t(x)
+        maxtop=max(top)
+        new=exp(top-maxtop)
       }else{
-        new=exp(y%*%parm%*%t(x))
+        top=y%*%parm%*%t(x)
+        maxtop=max(top)
+        new=exp(top-maxtop)
       }
       Fnew=as.vector(F%*%new)
       Fnew=Fnew/diag(new)

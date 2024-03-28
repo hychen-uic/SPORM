@@ -86,11 +86,14 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=10,nseq=10){
         }
       }
     }
+    print(c(iter,iter,nem))
+    print(c(min(theta),max(theta)))
 
     print('MC-step')
     for(nrep in 1:nseq){
+      print(c(nrep,nrep,nseq))
     for(k in 1:p){
-      print(c(k,k,p))
+      #print(c(k,k,p))
       if(sum(1-misdat[,k])>0){
         base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],fagg=TRUE)
 
@@ -108,8 +111,9 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=10,nseq=10){
           impdat[(ni-1)*n+misset,k]=imp[,ni]          }
         }
      }
+    }
   }
-  }
+
   return(list(theta,impdat))
 }
 

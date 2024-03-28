@@ -41,8 +41,9 @@ cprob=function(y,x,parm,F){
   }else{
     nrow=dim(y)[2]
   }
-
-  pred=diag(F)%*%exp(y%*%t(parm)%*%t(x))
+  top=y%*%t(parm)%*%t(x)
+  topmax=max(top)
+  pred=diag(F)%*%exp(top-topmax)
   pred=pred%*%diag(1/apply(pred,2,sum))
 
   return(list(pred))
