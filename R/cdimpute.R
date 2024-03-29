@@ -38,7 +38,7 @@ cdimpute=function(dat=dat,miscode=c(-9),method="sp",niter=10,nimpute=5){
     misdat=misdat-(dat==miscode[k])
   } # missing data indicators
 
-  #2. Get the conditional frequencies and impute using random draws.
+  #2. Get the marginal frequencies and impute using random draws.
   impdat=array(0,c(n*nimpute,p+1))
   for(ni in 1:nimpute){
     dstart=(ni-1)*n+1

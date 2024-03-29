@@ -66,8 +66,9 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=10,nseq=10){
 
   #3. Get the conditional frequencies and impute using random draws.
   theta=array(0,c(p,p-1))
+  thetaold=theta
   for(iter in 1:nem){
-    print(c(iter,iter,nem))
+    print(c(iter,nem))
 
     #a. M-step
     print('M-step')
@@ -86,17 +87,17 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=10,nseq=10){
         }
       }
     }
-    print(c(iter,iter,nem))
-    print(c(min(theta),max(theta)))
+    print(c(iter,iter,iter,nem))
+    print(c(min(theta),max(theta),sum(abs(theta-thetaold))))
+    thetaold=theta
 
     print('MC-step')
     for(nrep in 1:nseq){
-      print(c(nrep,nrep,nseq))
+      print(c(nrep,nseq))
     for(k in 1:p){
       #print(c(k,k,p))
       if(sum(1-misdat[,k])>0){
         base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],fagg=TRUE)
-
         misset=subset(c(1:n),misdat[,k]==0) # subset the locations of missing values
         subx=impdat[misset,setdiff(c(1:p),k)]
         pred=cprob(y=base[[2]],x=subx,parm=theta[k,],F=base[[1]])

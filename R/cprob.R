@@ -37,14 +37,20 @@ cprob=function(y,x,parm,F){
   # pred: predictive probabilities corresponding to all possible y values.
   #
   if(is.vector(y)==TRUE){
-    nrow=1
+    top=y%*%matrix(parm,nrow=1)%*%t(x)
   }else{
-    nrow=dim(y)[2]
+    top=y%*%matrix(parm,nrow=dim(y)[2])%*%t(x)
   }
-  top=y%*%t(parm)%*%t(x)
-  topmax=max(top)
-  pred=diag(F)%*%exp(top-topmax)
+  pred=diag(log(F))%*%top
+#  print(pred)
+  pred=pred-rep(1,dim(pred)[1])%*%t(apply(pred,2,max))
+      # subtract different rows by different constants
+#  print(pred)
   pred=pred%*%diag(1/apply(pred,2,sum))
+#  print('here')
+#  print(parm)
+#  print(F)
+#  print(pred)
 
   return(list(pred))
 }

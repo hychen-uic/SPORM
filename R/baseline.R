@@ -49,33 +49,31 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
   # fagg: whether aggregate the estimate over the distinctive y values
   #
 
+  # initial estimate uses weight
   if(is.vector(y)==TRUE){
     n=length(y)
-    F=rep(0,n)
+    #F=rep(0,n)
     # initial estimate uses weight
     top=-y*as.vector(x%*%parm)
-    maxtop=max(top)
-    F=exp(top-maxtop)
+    F=exp(top-max(top))
+    F=F/sum(F)
   }else{
-    # initial estimate uses weight
+    n=dim(y)[1]
     top=-y%*%matrix(parm,nrow=dim(y)[2])%*%t(x)
-    maxtop=max(top)
-    F=diag(exp(top-maxtop))
+    F=diag(exp(top-max(top)))
+    F=F/sum(F)
   }
-  F=F/sum(F)
+
+
 
   if(method=="iterate"){
     for(i in 1:50){
       if(is.vector(parm)==TRUE){
-        top=y%*%t(parm)%*%t(x)
-        maxtop=max(top)
-        new=exp(top-maxtop)
+        new=y%*%t(parm)%*%t(x)
       }else{
-        top=y%*%parm%*%t(x)
-        maxtop=max(top)
-        new=exp(top-maxtop)
+        new=y%*%parm%*%t(x)
       }
-      Fnew=as.vector(F%*%new)
+      Fnew=as.vector(F%*%exp(new-max(new)))
       Fnew=Fnew/diag(new)
       Fnew=Fnew/sum(Fnew)
       if(sum(abs(F-Fnew))<1e-6){
@@ -86,6 +84,7 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
       }
     }
   }
+
 # Aggregate the weights with the same y observed values.
 # The aggregated values will correspond to the candy. So no need to keep y order.
   if(fagg==TRUE){
