@@ -77,7 +77,7 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
       if(sum(abs(F-Fnew))<1e-5){
         break
       }else{
-        print(sum(abs(F-Fnew)))
+        #print(sum(abs(F-Fnew)))
         F=Fnew
       }
     }
