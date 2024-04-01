@@ -37,20 +37,17 @@ cprob=function(y,x,parm,F){
   # pred: predictive probabilities corresponding to all possible y values.
   #
   if(is.vector(y)==TRUE){
-    top=y%*%matrix(parm,nrow=1)%*%t(x)
+    n=length(y)
+    p=1
   }else{
-    top=y%*%matrix(parm,nrow=dim(y)[2])%*%t(x)
+    n=dim(y)[1]
+    p=dim(y)[2]
   }
-  pred=diag(log(F))%*%top
-#  print(pred)
-  pred=pred-rep(1,dim(pred)[1])%*%t(apply(pred,2,max))
-      # subtract different rows by different constants
-#  print(pred)
-  pred=pred%*%diag(1/apply(pred,2,sum))
-#  print('here')
-#  print(parm)
-#  print(F)
-#  print(pred)
+  new=matrix(y,nrow=n)%*%matrix(parm,nrow=p)%*%t(x)  #eta(y_k,x_j)_(nxn). new is a nxnmiss matrix
+  new=new-rep(1,n)%*%t(apply(new,2,max))   # eta-max_y eta(y_k,x_j),stablizer. new is a nxnmiss matrix
+  pred=diag(F)%*%exp(new)                  # eta(y,x) dF(y). pred is a nxnmiss matrix
+  pred=diag(1/apply(pred,2,sum))%*%pred    # eta(y,x) dF(y)/int eta(y,x) dF(y). pred is a nxnmiss matrix
+                                           # the predictive probabilities for each missing value
 
   return(list(pred))
 }

@@ -9,7 +9,7 @@ mcem(
   miscode = c(-9),
   method = "sp",
   nem = 10,
-  nimpute = 10,
+  nimpute = 5,
   nseq = 10
 )
 }

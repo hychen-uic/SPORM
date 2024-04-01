@@ -30,7 +30,7 @@
 #'@export
 #'
 
-mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=10,nseq=10){
+mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
   #1. Find the missing data indicators
   n=dim(dat)[1]
   p=dim(dat)[2]
@@ -66,10 +66,9 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=10,nseq=10){
 
   #3. Get the conditional frequencies and impute using random draws.
   theta=array(0,c(p,p-1))
-  thetaold=theta
   for(iter in 1:nem){
     print(c(iter,nem))
-
+    thetaold=theta
     #a. M-step
     print('M-step')
     for(k in 1:p){
@@ -93,14 +92,18 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=10,nseq=10){
 
     print('MC-step')
     for(nrep in 1:nseq){
-      print(c(nrep,nseq))
+  #    print(c(nrep,nseq))
     for(k in 1:p){
       #print(c(k,k,p))
       if(sum(1-misdat[,k])>0){
-        base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],fagg=TRUE)
+        base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],method="iterate",fagg=TRUE)
+
+        #plot(base[[2]],base[[1]])
+
         misset=subset(c(1:n),misdat[,k]==0) # subset the locations of missing values
         subx=impdat[misset,setdiff(c(1:p),k)]
         pred=cprob(y=base[[2]],x=subx,parm=theta[k,],F=base[[1]])
+        #print(pred[[1]])
 
         imp=array(0,c(length(misset),nimpute))
         for(j in 1:length(misset)){

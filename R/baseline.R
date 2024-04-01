@@ -49,42 +49,39 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
   # fagg: whether aggregate the estimate over the distinctive y values
   #
 
-  # initial estimate uses weight
+  # 1.initial estimate uses weight
   if(is.vector(y)==TRUE){
     n=length(y)
-    #F=rep(0,n)
-    # initial estimate uses weight
-    top=-y*as.vector(x%*%parm)
-    F=exp(top-max(top))
-    F=F/sum(F)
+    p=1
+    new=-y*as.vector(matrix(parm,nrow=1)%*%t(x))
   }else{
     n=dim(y)[1]
-    top=-y%*%matrix(parm,nrow=dim(y)[2])%*%t(x)
-    F=diag(exp(top-max(top)))
-    F=F/sum(F)
+    p=dim(y)[2]
+    new=diag(-y%*%matrix(parm,nrow=dim(y)[2])%*%t(x))  # log(eta(y_i,x_i))
   }
+  new=new-max(new)                           # stablizer
+  F=exp(new)/sum(exp(new))                   # rescaling
 
 
-
+  # 2. iterative estimate
   if(method=="iterate"){
-    for(i in 1:50){
-      if(is.vector(parm)==TRUE){
-        new=y%*%t(parm)%*%t(x)
-      }else{
-        new=y%*%parm%*%t(x)
-      }
-      Fnew=as.vector(F%*%exp(new-max(new)))
-      Fnew=Fnew/diag(new)
-      Fnew=Fnew/sum(Fnew)
-      if(sum(abs(F-Fnew))<1e-6){
-        #print(c(i,i,i))
+    for(i in 1:100){
+      print(c(i,i))
+      new=matrix(y,nrow=n)%*%matrix(parm,nrow=p)%*%t(x)  #eta(y_k,x_j)_(nxn). new is a nxn matrix
+      new=new-rep(1,n)%*%t(apply(new,2,max))   #eta-max_y eta(y_k,x_j),stablizer. new is a nxn matrix
+      Fnew=as.vector(t(F)%*%exp(new))                      #int eta(y,x) dF(y). Fnew is a 1xn matrix
+      Fnew=exp(new)%*%diag(1/Fnew)    #eta/int eta(y,x) dF(y). Fnew is a nxn matrix
+      Fnew=apply(Fnew,1,sum)             #int eta(y,x)/int eta(y,x) dF(y) dP_n(x) .Fnew becomes a vector of size n
+      Fnew=(1/Fnew)/sum(1/Fnew)         # renormalizing
+
+      if(sum(abs(F-Fnew))<1e-5){
         break
       }else{
+        print(sum(abs(F-Fnew)))
         F=Fnew
       }
     }
   }
-
 # Aggregate the weights with the same y observed values.
 # The aggregated values will correspond to the candy. So no need to keep y order.
   if(fagg==TRUE){
