@@ -66,7 +66,7 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
   # 2. iterative estimate
   if(method=="iterate"){
     for(i in 1:100){
-      print(c(i,i))
+      #print(c(i,i))
       new=matrix(y,nrow=n)%*%matrix(parm,nrow=p)%*%t(x)  #eta(y_k,x_j)_(nxn). new is a nxn matrix
       new=new-rep(1,n)%*%t(apply(new,2,max))   #eta-max_y eta(y_k,x_j),stablizer. new is a nxn matrix
       Fnew=as.vector(t(F)%*%exp(new))                      #int eta(y,x) dF(y). Fnew is a 1xn matrix

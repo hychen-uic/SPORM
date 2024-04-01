@@ -46,7 +46,7 @@ cprob=function(y,x,parm,F){
   new=matrix(y,nrow=n)%*%matrix(parm,nrow=p)%*%t(x)  #eta(y_k,x_j)_(nxn). new is a nxnmiss matrix
   new=new-rep(1,n)%*%t(apply(new,2,max))   # eta-max_y eta(y_k,x_j),stablizer. new is a nxnmiss matrix
   pred=diag(F)%*%exp(new)                  # eta(y,x) dF(y). pred is a nxnmiss matrix
-  pred=diag(1/apply(pred,2,sum))%*%pred    # eta(y,x) dF(y)/int eta(y,x) dF(y). pred is a nxnmiss matrix
+  pred=diag(1/apply(pred,1,sum))%*%pred    # eta(y,x) dF(y)/int eta(y,x) dF(y). pred is a nxnmiss matrix
                                            # the predictive probabilities for each missing value
 
   return(list(pred))
