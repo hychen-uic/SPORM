@@ -39,7 +39,7 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
     misdat=misdat-(dat==miscode[k])
     } # missing data indicators
 
-  #2. Get the conditional frequencies and impute using random draws.
+  #2. Get the marginal frequencies and impute using random draws.
   impdat=array(0,c(n*nimpute,p+1))
   for(ni in 1:nimpute){
     dstart=(ni-1)*n+1
@@ -68,11 +68,11 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
   theta=array(0,c(p,p-1))
   for(iter in 1:nem){
     print(c(iter,nem))
-    thetaold=theta
-    #a. M-step
-    print('M-step')
     for(k in 1:p){
+      #a. M-step
+      print('M-step')
       print(c(k,k,p))
+      thetaold=theta[k,]
       if(sum(1-misdat[,k])>0){
         if(method=='pw'){
           fit=pwlkh(impdat[,k],impdat[,setdiff(c(1:p),k)])
@@ -84,24 +84,26 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
           }
         theta[k,]=fit[[1]]
         }
-      }
-    }
-    print(c(iter,iter,iter,nem))
-    print(c(min(theta),max(theta),sum(abs(theta-thetaold))))
-    thetaold=theta
+
+   #    }
+      print(sum(abs(thetaold-theta[k,])))
+    #print(c(iter,iter,iter,nem))
+    #print(c(min(theta),max(theta),sum(abs(theta-thetaold))))
+    #thetaold=theta
 
     print('MC-step')
-    for(nrep in 1:nseq){
-  #    print(c(nrep,nseq))
-    for(k in 1:p){
-      #print(c(k,k,p))
-      if(sum(1-misdat[,k])>0){
+    #for(nrep in 1:nseq){
+    #  print(c(nrep,nseq))
+    #for(k in 1:p){
+    #  print(c(k,k,p))
+    #  if(sum(1-misdat[,k])>0){
         base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],method="iterate",fagg=TRUE)
 
         #plot(base[[2]],base[[1]])
 
         misset=subset(c(1:n),misdat[,k]==0) # subset the locations of missing values
         subx=impdat[misset,setdiff(c(1:p),k)]
+
         pred=cprob(y=base[[2]],x=subx,parm=theta[k,],F=base[[1]])
         #print(pred[[1]])
 
@@ -112,9 +114,9 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
         for(ni in 1:nimpute){
           dstart=(ni-1)*n+1
           dend=ni*n
-          impdat[(ni-1)*n+misset,k]=imp[,ni]          }
+          impdat[(ni-1)*n+misset,k]=imp[,ni]
         }
-     }
+      }
     }
   }
 
