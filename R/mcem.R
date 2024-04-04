@@ -70,7 +70,7 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
     print(c(iter,nem))
     for(k in 1:p){
       #a. M-step
-      print('M-step')
+      #print('M-step')
       print(c(k,k,p))
       thetaold=theta[k,]
       if(sum(1-misdat[,k])>0){
@@ -93,7 +93,7 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
     print(sum(abs(theta[k,]-thetaold)))
     #thetaold=theta
 
-    print('MC-step')
+    #print('MC-step')
     #for(nrep in 1:nseq){
     #  print(c(nrep,nseq))
     #for(k in 1:p){
