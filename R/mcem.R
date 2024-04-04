@@ -88,7 +88,7 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
    #    }
     #print(sum(abs(thetaold-theta[k,])))
     #print(c(iter,iter,iter,nem))
-    print(c(min(theta),max(theta),sum(abs(theta-thetaold))))
+    print(c(min(theta[k,]),max(theta[k,]),sum(abs(theta[k,]-thetaold))))
     #thetaold=theta
 
     print('MC-step')
