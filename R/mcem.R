@@ -8,6 +8,7 @@
 #'        method='pm' for permutation likelihood approach
 #' @param nem the number of EM steps
 #' @param nimpute the number of Monte Carlo copies for each missing value
+#' @parm stepsize control the step size of each M-step update.
 #'
 #' @details This function maximizes the conditional likelihood coordinate-wise
 #' by the Monte Carlo EM algorithm. In M-step, all the OR parameters are
@@ -29,7 +30,7 @@
 #'@export
 #'
 
-mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1){
+mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3){
   #1. Find the missing data indicators
   n=dim(dat)[1]
   p=dim(dat)[2]
@@ -85,6 +86,8 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1){
           }
         }
         theta[k,]=fit[[1]]
+
+        theta[k,]=thetaold+stepsize*(theta[k,]-thetaold)
 
     print(theta[k,])
     print(sum(abs(theta[k,]-thetaold)))
