@@ -8,7 +8,6 @@
 #'        method='pm' for permutation likelihood approach
 #' @param nem the number of EM steps
 #' @param nimpute the number of Monte Carlo copies for each missing value
-#' @param nseq the number of repeated sampling steps in each MC-step
 #'
 #' @details This function maximizes the conditional likelihood coordinate-wise
 #' by the Monte Carlo EM algorithm. In M-step, all the OR parameters are
@@ -30,7 +29,7 @@
 #'@export
 #'
 
-mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
+mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1){
   #1. Find the missing data indicators
   n=dim(dat)[1]
   p=dim(dat)[2]
@@ -69,11 +68,13 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
   for(iter in 1:nem){
     print(c(iter,nem))
     for(k in 1:p){
-      #a. M-step
-      #print('M-step')
+
       print(c(k,k,p))
       thetaold=theta[k,]
       if(sum(1-misdat[,k])>0){
+
+        #a. M-step
+        #print('M-step')
         if(method=='pw'){
           fit=pwlkh(impdat[,k],impdat[,setdiff(c(1:p),k)])
         }else{
@@ -82,32 +83,20 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=5,nseq=10){
           }else{
             fit=pmlkh(cbind(impdat[,k],impdat[,setdiff(c(1:p),k)]),c(1,p-1))
           }
-        theta[k,]=fit[[1]]
         }
+        theta[k,]=fit[[1]]
 
-   #    }
-    #print(sum(abs(thetaold-theta[k,])))
-    #print(c(iter,iter,iter,nem))
-    #print(c(min(theta[k,]),max(theta[k,]),sum(abs(theta[k,]-thetaold))))
     print(theta[k,])
     print(sum(abs(theta[k,]-thetaold)))
-    #thetaold=theta
 
-    #print('MC-step')
-    #for(nrep in 1:nseq){
-    #  print(c(nrep,nseq))
-    #for(k in 1:p){
-    #  print(c(k,k,p))
-    #  if(sum(1-misdat[,k])>0){
+        # b. MC-step
+        #print('MC-step')
         base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],method="iterate",fagg=TRUE)
-
-        #plot(base[[2]],base[[1]])
 
         misset=subset(c(1:n),misdat[,k]==0) # subset the locations of missing values
         subx=impdat[misset,setdiff(c(1:p),k)]
 
         pred=cprob(y=base[[2]],x=subx,parm=theta[k,],F=base[[1]])
-        #print(pred[[1]])
 
         imp=array(0,c(length(misset),nimpute))
         for(j in 1:length(misset)){

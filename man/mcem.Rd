@@ -4,14 +4,7 @@
 \alias{mcem}
 \title{Implementing Monte Carlo EM algorithm by coordinate-wise conditional maximization}
 \usage{
-mcem(
-  dat = dat,
-  miscode = c(-9),
-  method = "sp",
-  nem = 10,
-  nimpute = 5,
-  nseq = 10
-)
+mcem(dat = dat, miscode = c(-9), method = "sp", nem = 10, nimpute = 1)
 }
 \arguments{
 \item{dat}{a data matrix with possible missing values}
@@ -26,8 +19,6 @@ method='pm' for permutation likelihood approach}
 \item{nem}{the number of EM steps}
 
 \item{nimpute}{the number of Monte Carlo copies for each missing value}
-
-\item{nseq}{the number of repeated sampling steps in each MC-step}
 }
 \value{
 \enumerate{
