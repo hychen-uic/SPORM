@@ -8,7 +8,8 @@
 #'        method='pm' for permutation likelihood approach
 #' @param nem the number of EM steps
 #' @param nimpute the number of Monte Carlo copies for each missing value
-#' @parm stepsize control the step size of each M-step update.
+#' @parm stepsize controls the step size of each M-step update.
+#' @parm nstep controls the number of steps before the change of step size
 #'
 #' @details This function maximizes the conditional likelihood coordinate-wise
 #' by the Monte Carlo EM algorithm. In M-step, all the OR parameters are
@@ -30,7 +31,7 @@
 #'@export
 #'
 
-mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3){
+mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3,nstep=20){
   #1. Find the missing data indicators
   n=dim(dat)[1]
   p=dim(dat)[2]
@@ -65,6 +66,7 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3){
   }
 
   #3. Get the conditional frequencies and impute using random draws.
+  stheta=array(0,c(nem,p,p-1))
   theta=array(0,c(p,p-1))
   for(iter in 1:nem){
     print(c(iter,nem))
@@ -87,6 +89,7 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3){
         }
         theta[k,]=fit[[1]]
 
+        if(iter>nstep){stepsize=1}
         theta[k,]=thetaold+stepsize*(theta[k,]-thetaold)
 
     print(theta[k,])
@@ -95,11 +98,12 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3){
         # b. MC-step
         #print('MC-step')
         base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],method="iterate",fagg=TRUE)
+        #base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],fagg=TRUE)
 
         misset=subset(c(1:n),misdat[,k]==0) # subset the locations of missing values
         subx=impdat[misset,setdiff(c(1:p),k)]
 
-        pred=cprob(y=base[[2]],x=subx,parm=theta[k,],F=base[[1]])
+        pred=cprob(y=base[[2]],x=subx,parm=theta[k,],logF=base[[3]])
 
         imp=array(0,c(length(misset),nimpute))
         for(j in 1:length(misset)){
@@ -112,8 +116,12 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3){
         }
       }
     }
+
+    stheta[iter,,]=theta
+    draw(stheta)
+
   }
 
-  return(list(theta,impdat))
+  return(list(theta,impdat,stheta))
 }
 

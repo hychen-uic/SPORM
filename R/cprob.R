@@ -3,7 +3,7 @@
 #' @param y a vector (or a matrix) of all possible outcome values.
 #' @param x a vector of covariates.
 #' @param parm  a vector (or a matrix) of the OR parameters.
-#' @param F baseline probabilities for all possible y values
+#' @param logF logarithm (to keep from treating small probability as 0) of baseline probabilities for all possible y values
 #'
 #' @details This function estimates the predictive probabilities for
 #'               given parameters theta and baseline function
@@ -28,13 +28,14 @@
 #'@export
 #'
 
-cprob=function(y,x,parm,F){
+cprob=function(y,x,parm,logF){
+
   # compute the all the predictive probabilities for a given x value
   # y: all possible outcome values
   # x: given covariate value.
   # parm: regression parameters(if y is a vector, it is lay out column-wise)
-  # F: baseline function
-  # pred: predictive probabilities corresponding to all possible y values.
+  # logF: logarithm of the baseline function. Use log-scale to avoid treating very small F as 0.
+  # logpred: logarithm of the predictive probabilities
   #
   if(is.vector(y)==TRUE){
     n=length(y)
@@ -43,12 +44,25 @@ cprob=function(y,x,parm,F){
     n=dim(y)[1]
     p=dim(y)[2]
   }
-  new=matrix(y,nrow=n)%*%matrix(parm,nrow=p)%*%t(x)  #eta(y_k,x_j)_(nxn). x_(nmissxp)
-                                                     #new is a nxnmiss matrix
-  new=new-rep(1,n)%*%t(apply(new,2,max))   # eta-max_y eta(y_k,x_j),stablizer. new is a nxnmiss matrix
-  pred=diag(F)%*%exp(new)                  # eta(y,x) dF(y). pred is a nxnmiss matrix
-  pred=pred%*%diag(1/apply(pred,2,sum))    # eta(y,x) dF(y)/int eta(y,x) dF(y). pred is a nxnmiss matrix
-                                           # the predictive probabilities for each missing value
+  if(is.vector(x)==TRUE){
+    nmiss=length(x)
+  }else{
+    nmiss=dim(x)[1]
+  }
+  new=matrix(y,nrow=n)%*%matrix(parm,nrow=p)%*%t(x)  #log(eta(y_k,x_j)_(nxnmiss)). x_(nmissxp)
+  logpred=logF%*%t(rep(1,nmiss))+new           # log(eta(y,x) dF(y)). logpred is a nxnmiss matrix
+                                               # This is in log-scale to avoid treating very small pred as 0.
+  logpred=logpred-rep(1,n)%*%t(apply(logpred,2,max))  #To rescale to make it close to 0.
+                                                      #This is necessary to avoid numeric problem.
+  logpred=logpred-rep(1,n)%*%t(log(apply(exp(logpred),2,sum)))
+                        # log(eta(y,x) dF(y)/int eta(y,x) dF(y)). pred is a nxnmiss matrix
+  pred=exp(logpred)     # the predictive probabilities for each missing value
+
+#  for(j in 1:nmiss){
+#    print(sum(pred[,j]))
+#    if(sum(pred[,j])<0.9){print(x[j,]);print(logF);print(logpred[,j])}
+#  }
+
   return(list(pred))
 }
 

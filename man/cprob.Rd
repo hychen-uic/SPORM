@@ -4,7 +4,7 @@
 \alias{cprob}
 \title{Compute conditional probability for a given covariate x, outcome y, OR parameter theta, and baseline function F.}
 \usage{
-cprob(y, x, parm, F)
+cprob(y, x, parm, logF)
 }
 \arguments{
 \item{y}{a vector (or a matrix) of all possible outcome values.}
@@ -13,7 +13,7 @@ cprob(y, x, parm, F)
 
 \item{parm}{a vector (or a matrix) of the OR parameters.}
 
-\item{F}{baseline probabilities for all possible y values}
+\item{logF}{logarithm (to keep from treating small probability as 0) of baseline probabilities for all possible y values}
 }
 \value{
 \enumerate{

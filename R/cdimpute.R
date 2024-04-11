@@ -82,7 +82,7 @@ cdimpute=function(dat=dat,miscode=c(-9),method="sp",niter=10,nimpute=5){
 
         misset=subset(c(1:n),misdat[,k]==0) # subset the locations of missing values
         subx=impdat[misset,setdiff(c(1:p),k)]
-        pred=cprob(y=base[[2]],x=subx,parm=fit[[1]],F=base[[1]])
+        pred=cprob(y=base[[2]],x=subx,parm=fit[[1]],logF=base[[3]])
 
         imp=array(0,c(length(misset),nimpute))
         for(j in 1:length(misset)){

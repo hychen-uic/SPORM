@@ -59,26 +59,31 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
     p=dim(y)[2]
     new=diag(-y%*%matrix(parm,nrow=dim(y)[2])%*%t(x))  # log(eta(y_i,x_i))
   }
-  new=new-max(new)                           # stablizer
-  F=exp(new)/sum(exp(new))                   # rescaling
-
+  #new=new-max(new)
+  logF=new-log(sum(exp(new))) ##keep logarithm of F instead of F to prevent from too close to 0.
 
   # 2. iterative estimate
   if(method=="iterate"){
     for(i in 1:100){
-      #print(c(i,i))
+      #in log-scale
       new=matrix(y,nrow=n)%*%matrix(parm,nrow=p)%*%t(x)  #eta(y_k,x_j)_(nxn). new is a nxn matrix
-      new=new-rep(1,n)%*%t(apply(new,2,max))   #eta-max_y eta(y_k,x_j),stablizer. new is a nxn matrix
-      Fnew=as.vector(t(F)%*%exp(new))                      #int eta(y,x) dF(y). Fnew is a 1xn matrix
-      Fnew=exp(new)%*%diag(1/Fnew)    #eta/int eta(y,x) dF(y). Fnew is a nxn matrix
-      Fnew=apply(Fnew,1,sum)             #int eta(y,x)/int eta(y,x) dF(y) dP_n(x) .Fnew becomes a vector of size n
-      Fnew=(1/Fnew)/sum(1/Fnew)         # renormalizing
+      logFnew=logF%*%t(rep(1,n))+new                     #log(eta(y,x) dF(y)). logFnew is a nxn matrix
+      logFnew=logFnew-rep(1,n)%*%t(apply(logFnew,2,max)) #stablizer is necessary to avoid numeric problem
+      logFnew=logFnew-rep(1,n)%*%t(log(apply(exp(logFnew),2,sum)))
+                                                         # log(eta(y,x)dF(y)/int eta(y,x) dF(y))
 
-      if(sum(abs(F-Fnew))<1e-5){
+      logFnew=logFnew-apply(logFnew,1,max)%*%t(rep(1,n)) #stablizer is necessary to avoid numeric problem
+      logFnew=-log(apply(exp(logFnew),1,sum))  #-log(int eta(y,x)/int eta(y,x) dF(y) dP_n(x)).
+                                               #logFnew becomes a vector of size n
+      logFnew=logFnew-max(logFnew)+logF-log(sum(exp(logFnew+logF-max(logFnew))))
+
+      #print(c(max(logFnew),min(logFnew),sum(exp(logFnew))))
+
+      if(sum(abs(exp(logF)-exp(logFnew)))<1e-5){
         break
       }else{
-        #print(sum(abs(F-Fnew)))
-        F=Fnew
+        #print(sum(abs(exp(logF)-exp(logFnew))))
+        logF=logFnew
       }
     }
   }
@@ -88,44 +93,52 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
     ind=c(1:n)
     if(is.vector(y)==TRUE){
       ord=order(y)
-      F=F[ord]
+      #F=F[ord]
+      logF=logF[ord]
       y=y[ord]
 
       k=1
       for(i in 2:n){
         if(abs(y[i]-y[ind[k]])<1e-8){
-          F[k]=F[k]+F[i]
+          #F[k]=F[k]+F[i]
+          logF[k]=logF[k]+log(1+exp(logF[i]-logF[k]))
         }else{
           k=k+1
-          F[k]=F[i]
+          #F[k]=F[i]
+          logF[k]=logF[i]
           ind[k]=i
         }
       }
     }else{
       ord=do.call(order, as.data.frame(y))
-      F=F[ord]
+      #F=F[ord]
+      logF=logF[ord]
       y=y[ord,]
 
       k=1
       for(i in 2:n){
         if(sum(abs(y[i,]-y[ind[k],]))<1e-7){
-          F[k]=F[k]+F[i]
+          #F[k]=F[k]+F[i]
+          logF[k]=logF[k]+log(1+exp(logF[i]-logF[k]))
         }else{
           k=k+1
-          F[k]=F[i]
+          #F[k]=F[i]
+          logF[k]=logF[i]
           ind[k]=i
         }
       }
 
     }
 
+    F=exp(logF) #compute the baseline.
+    ###!!! Keep logF in the output is to avoid treating small F as 0, which can be disatrious in this case.
     if(is.vector(y)==TRUE){
-      return(list( F[1:k],y[ind[1:k]],ind[1:k])) # aggregated and ordered
+      return(list(F[1:k],y[ind[1:k]],logF[1:k],ind[1:k])) # aggregated and ordered
     }else{
-      return(list(F[1:k],y[ind[1:k],],ind[1:k])) # aggregated and ordered
+      return(list(F[1:k],y[ind[1:k],],logF[1:k],ind[1:k])) # aggregated and ordered
     }
   }else{
-    return(list(F,y)) # nonaggregated and nonordered
+    return(list(F,y,logF)) # nonaggregated and nonordered
   }
 
 }

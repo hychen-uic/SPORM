@@ -4,7 +4,15 @@
 \alias{mcem}
 \title{Implementing Monte Carlo EM algorithm by coordinate-wise conditional maximization}
 \usage{
-mcem(dat = dat, miscode = c(-9), method = "sp", nem = 10, nimpute = 1)
+mcem(
+  dat = dat,
+  miscode = c(-9),
+  method = "sp",
+  nem = 10,
+  nimpute = 1,
+  stepsize = 0.3,
+  nstep = 20
+)
 }
 \arguments{
 \item{dat}{a data matrix with possible missing values}
