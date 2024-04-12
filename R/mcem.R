@@ -8,8 +8,8 @@
 #'        method='pm' for permutation likelihood approach
 #' @param nem the number of EM steps
 #' @param nimpute the number of Monte Carlo copies for each missing value
-#' @parm stepsize controls the step size of each M-step update.
-#' @parm nstep controls the number of steps before the change of step size
+#' @param stepsize controls the step size of each M-step update.
+#' @param nstep controls the number of steps before the change of step size
 #'
 #' @details This function maximizes the conditional likelihood coordinate-wise
 #' by the Monte Carlo EM algorithm. In M-step, all the OR parameters are

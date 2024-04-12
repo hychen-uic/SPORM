@@ -59,7 +59,7 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
     p=dim(y)[2]
     new=diag(-y%*%matrix(parm,nrow=dim(y)[2])%*%t(x))  # log(eta(y_i,x_i))
   }
-  #new=new-max(new)
+  new=new-max(new)
   logF=new-log(sum(exp(new))) ##keep logarithm of F instead of F to prevent from too close to 0.
 
   # 2. iterative estimate
@@ -70,12 +70,10 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
       logFnew=logF%*%t(rep(1,n))+new                     #log(eta(y,x) dF(y)). logFnew is a nxn matrix
       logFnew=logFnew-rep(1,n)%*%t(apply(logFnew,2,max)) #stablizer is necessary to avoid numeric problem
       logFnew=logFnew-rep(1,n)%*%t(log(apply(exp(logFnew),2,sum)))
-                                                         # log(eta(y,x)dF(y)/int eta(y,x) dF(y))
-
-      logFnew=logFnew-apply(logFnew,1,max)%*%t(rep(1,n)) #stablizer is necessary to avoid numeric problem
-      logFnew=-log(apply(exp(logFnew),1,sum))  #-log(int eta(y,x)/int eta(y,x) dF(y) dP_n(x)).
-                                               #logFnew becomes a vector of size n
-      logFnew=logFnew-max(logFnew)+logF-log(sum(exp(logFnew+logF-max(logFnew))))
+                                                         #log(eta(y,x)dF(y)/int eta(y,x)dF(y))
+      logFnew=logF-log(apply(exp(logFnew),1,sum))  #-log(int eta(y,x)/int eta(y,x) dF(y) dP_n(x)).
+                                                   #logFnew becomes a vector of size n
+      logFnew=logFnew-max(logFnew)-log(sum(exp(logFnew-max(logFnew))))
 
       #print(c(max(logFnew),min(logFnew),sum(exp(logFnew))))
 

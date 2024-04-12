@@ -5,8 +5,12 @@
 \alias{bone}
 \title{Bone fracture data set}
 \format{
-A data matrix with 436 records and 28 variables. -9 in any variable
+A data matrix with 436 records and 27 variables. -9 in any variable
 denotes missing value. race and age are matching variables.
+variables include:
+"fracture"      "age"     "race"    "etoh"    "smoke"   "CVA"     "dement"  "parkins" "seizure" "Sedat"
+"NSAIDs"  "Steroid" "Lasix"   "HCTZ"    "Antisz"  "CaCO3"   "LevoT4"  "AntiCh"  "wt"      "ht"
+"hgb"     "hct"     "BUN"     "Cr"      "albumin" "cholest" "COPD"
 }
 \source{
 A case-control study of hip fractures in veteran,

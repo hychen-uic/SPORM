@@ -27,6 +27,10 @@ method='pm' for permutation likelihood approach}
 \item{nem}{the number of EM steps}
 
 \item{nimpute}{the number of Monte Carlo copies for each missing value}
+
+\item{stepsize}{controls the step size of each M-step update.}
+
+\item{nstep}{controls the number of steps before the change of step size}
 }
 \value{
 \enumerate{
