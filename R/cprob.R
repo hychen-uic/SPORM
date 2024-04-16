@@ -32,7 +32,7 @@ cprob=function(y,x,parm,logF){
 
   # compute the all the predictive probabilities for a given x value
   # y: all possible outcome values
-  # x: given covariate value.
+  # x: given covariate values.
   # parm: regression parameters(if y is a vector, it is lay out column-wise)
   # logF: logarithm of the baseline function. Use log-scale to avoid treating very small F as 0.
   # logpred: logarithm of the predictive probabilities
@@ -57,11 +57,6 @@ cprob=function(y,x,parm,logF){
   logpred=logpred-rep(1,n)%*%t(log(apply(exp(logpred),2,sum)))
                         # log(eta(y,x) dF(y)/int eta(y,x) dF(y)). pred is a nxnmiss matrix
   pred=exp(logpred)     # the predictive probabilities for each missing value
-
-#  for(j in 1:nmiss){
-#    print(sum(pred[,j]))
-#    if(sum(pred[,j])<0.9){print(x[j,]);print(logF);print(logpred[,j])}
-#  }
 
   return(list(pred))
 }

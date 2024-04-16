@@ -793,9 +793,9 @@ end subroutine BaseEstbyNRSel
             do k=i-1,1,-1
                sum=sum-a(i,k)*a(j,k)
                if(i.eq.j) then
-                  if(sum.le.0) then
-                     write(*,*)j,j
-                  endif
+                 ! if(sum.le.0) then
+                 !    write(*,*)j,j
+                 ! endif
                   b(i)=sqrt(sum)
                else
                   a(j,i)=sum/b(i)

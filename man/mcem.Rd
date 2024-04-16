@@ -7,6 +7,8 @@
 mcem(
   dat = dat,
   miscode = c(-9),
+  intvcen = FALSE,
+  cintv = 0,
   method = "sp",
   nem = 10,
   nimpute = 1,
@@ -18,6 +20,16 @@ mcem(
 \item{dat}{a data matrix with possible missing values}
 
 \item{miscode}{a set of values used for denoting missing values}
+
+\item{intvcen}{The default intvcen==FALSE means only purely missing can occur. No need to
+include cintv.
+if intvcen=TRUE, the matrix cintv needs to be provided to denote the censoring interval
+this can also be used for purely missing where cintv(,1)=1,cintv(,2)=n.}
+
+\item{cintv}{a matrix with the same number of rows as x, and two columns corresponding to
+the start and end of each censoring interval. For example, if y is missing, then
+the start and end numbers are (1,n); if y is censored, the start and end numbers
+may be something like (4,9) meaning the censored value is in (y(4),y(9))}
 
 \item{method}{specific method of estimation, can be
 method='sp' for semiparametric likelihood approach (default)

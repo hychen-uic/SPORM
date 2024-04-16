@@ -621,9 +621,9 @@ subroutine PDmatinv(a,n)
             do k=i-1,1,-1
                tot=tot-a(i,k)*a(j,k)
                if(i.eq.j) then
-                  if(tot<=0) then
-                     write(*,*)j,j,'  choldc failed'
-                  endif
+                 ! if(tot<=0) then
+                 !    write(*,*)j,j,'  choldc failed'
+                 ! endif
                   b(i)=sqrt(tot)
                else
                   a(j,i)=tot/b(i)

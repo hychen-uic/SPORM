@@ -2,6 +2,14 @@
 #'
 #' @param dat a data matrix with possible missing values
 #' @param miscode a set of values used for denoting missing values
+#' @param intvcen The default intvcen==FALSE means only purely missing can occur. No need to
+#'                include cintv.
+#'                if intvcen=TRUE, the matrix cintv needs to be provided to denote the censoring interval
+#'                this can also be used for purely missing where cintv(,1)=1,cintv(,2)=n.
+#' @param cintv a matrix with the same number of rows as x, and two columns corresponding to
+#'              the start and end of each censoring interval. For example, if y is missing, then
+#'              the start and end numbers are (1,n); if y is censored, the start and end numbers
+#'              may be something like (4,9) meaning the censored value is in (y(4),y(9))
 #' @param method specific method of estimation, can be
 #'         method='sp' for semiparametric likelihood approach (default)
 #'        method='pw' for pairwise likelihood approach
@@ -31,7 +39,7 @@
 #'@export
 #'
 
-mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3,nstep=20){
+mcem=function(dat=dat,miscode=c(-9),intvcen=FALSE,cintv=0,method="sp",nem=10,nimpute=1,stepsize=0.3,nstep=20){
   #1. Find the missing data indicators
   n=dim(dat)[1]
   p=dim(dat)[2]
@@ -74,7 +82,7 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3,ns
 
       print(c(k,k,p))
       thetaold=theta[k,]
-      if(sum(1-misdat[,k])>0){
+#      if(sum(1-misdat[,k])>0){
 
         #a. M-step
         #print('M-step')
@@ -96,6 +104,7 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3,ns
     print(sum(abs(theta[k,]-thetaold)))
 
         # b. MC-step
+    if(sum(1-misdat[,k])>0){
         #print('MC-step')
         base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],method="iterate",fagg=TRUE)
         #base=baseline(impdat[,k],impdat[,setdiff(c(1:p),k)],parm=theta[k,],fagg=TRUE)
@@ -107,7 +116,15 @@ mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3,ns
 
         imp=array(0,c(length(misset),nimpute))
         for(j in 1:length(misset)){
-          imp[j,]=sample(x=base[[2]],prob=pred[[1]][,j],size=nimpute,replace=TRUE)
+          #if interval censoring
+          if(intvcen==TRUE){# for censoring and/or mixed censoring and missing
+            ysubset=c(cintv[j,1]:cintv[j,])
+            predy=base[[2]][ysubset]
+            predprob=pred[[1]][ysubset,j]/sum(pred[[1]][ysubset,j])
+            imp[j,]=sample(x=predy,prob=predprob,size=nimpute,replace=TRUE)
+          }else{ #for purely missing
+            imp[j,]=sample(x=base[[2]],prob=pred[[1]][,j],size=nimpute,replace=TRUE)
+          }
         }
         for(ni in 1:nimpute){
           dstart=(ni-1)*n+1
