@@ -26,9 +26,10 @@ include cintv.
 if intvcen=TRUE, the matrix cintv needs to be provided to denote the censoring interval
 this can also be used for purely missing where cintv(,1)=1,cintv(,2)=n.}
 
-\item{cintv}{a matrix with the same number of rows as x, and two columns corresponding to
-the start and end of each censoring interval. For example, if y is missing, then
-the start and end numbers are (1,n); if y is censored, the start and end numbers
+\item{cintv}{an array cintv(n,p,2) with the same number of rows columns as the input data,
+and the third dimension has length two to store the start and end of each
+censoring interval. For example, if y_k is missing, then
+the start and end numbers are (1,n); if y_k is censored, the start and end numbers
 may be something like (4,9) meaning the censored value is in (y(4),y(9))}
 
 \item{method}{specific method of estimation, can be

@@ -6,9 +6,10 @@
 #'                include cintv.
 #'                if intvcen=TRUE, the matrix cintv needs to be provided to denote the censoring interval
 #'                this can also be used for purely missing where cintv(,1)=1,cintv(,2)=n.
-#' @param cintv a matrix with the same number of rows as x, and two columns corresponding to
-#'              the start and end of each censoring interval. For example, if y is missing, then
-#'              the start and end numbers are (1,n); if y is censored, the start and end numbers
+#' @param cintv an array cintv(n,p,2) with the same number of rows columns as the input data,
+#'              and the third dimension has length two to store the start and end of each
+#'              censoring interval. For example, if y_k is missing, then
+#'              the start and end numbers are (1,n); if y_k is censored, the start and end numbers
 #'              may be something like (4,9) meaning the censored value is in (y(4),y(9))
 #' @param method specific method of estimation, can be
 #'         method='sp' for semiparametric likelihood approach (default)
@@ -118,7 +119,7 @@ mcem=function(dat=dat,miscode=c(-9),intvcen=FALSE,cintv=0,method="sp",nem=10,nim
         for(j in 1:length(misset)){
           #if interval censoring
           if(intvcen==TRUE){# for censoring and/or mixed censoring and missing
-            ysubset=c(cintv[j,1]:cintv[j,])
+            ysubset=c(cintv[j,k,1]:cintv[j,k,2])
             predy=base[[2]][ysubset]
             predprob=pred[[1]][ysubset,j]/sum(pred[[1]][ysubset,j])
             imp[j,]=sample(x=predy,prob=predprob,size=nimpute,replace=TRUE)
