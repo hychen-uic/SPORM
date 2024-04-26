@@ -2,19 +2,10 @@
 #'
 #' @param dat a data matrix with possible missing values
 #' @param miscode a set of values used for denoting missing values
-#' @param intvcen The default intvcen==FALSE means only purely missing can occur. No need to
-#'                include cintv.
-#'                if intvcen=TRUE, the matrix cintv needs to be provided to denote the censoring interval
-#'                this can also be used for purely missing where cintv(,1)=1,cintv(,2)=n.
-#' @param cintv an array cintv(n,p,2) with the same number of rows columns as the input data,
-#'              and the third dimension has length two to store the start and end of each
-#'              censoring interval. For example, if y_k is missing, then
-#'              the start and end numbers are (1,n); if y_k is censored, the start and end numbers
-#'              may be something like (4,9) meaning the censored value is in (y(4),y(9))
 #' @param method specific method of estimation, can be
 #'         method='sp' for semiparametric likelihood approach (default)
-#'        method='pw' for pairwise likelihood approach
-#'        method='pm' for permutation likelihood approach
+#'         method='pw' for pairwise likelihood approach
+#'         method='pm' for permutation likelihood approach
 #' @param nem the number of EM steps
 #' @param nimpute the number of Monte Carlo copies for each missing value
 #' @param stepsize controls the step size of each M-step update.
@@ -40,7 +31,7 @@
 #'@export
 #'
 
-mcem=function(dat=dat,miscode=c(-9),intvcen=FALSE,cintv=0,method="sp",nem=10,nimpute=1,stepsize=0.3,nstep=20){
+mcem=function(dat=dat,miscode=c(-9),method="sp",nem=10,nimpute=1,stepsize=0.3,nstep=20){
   #1. Find the missing data indicators
   n=dim(dat)[1]
   p=dim(dat)[2]
@@ -64,13 +55,8 @@ mcem=function(dat=dat,miscode=c(-9),intvcen=FALSE,cintv=0,method="sp",nem=10,nim
     a_freq=as.numeric(a)
     if(sum(1-misdat[,k])>0){
       misset=subset(c(1:n),misdat[,k]==0) # subset the locations of missing values
-      imp=sample(x=a_cat,prob=a_freq/sum(a_freq),size=length(misset)*nimpute,replace=TRUE)
-      imp=matrix(imp, ncol=nimpute)
-      for(ni in 1:nimpute){
-        dstart=(ni-1)*n+1
-        dend=ni*n
-        impdat[(ni-1)*n+misset,k]=imp[,ni] # fill in the imputed values by random draws
-      }
+      impdat[c(0:(nimpute-1))*n+misset,k]=sample(x=a_cat,prob=a_freq/sum(a_freq),
+                                      size=length(misset)*nimpute,replace=TRUE)
     }
   }
 
@@ -97,7 +83,7 @@ mcem=function(dat=dat,miscode=c(-9),intvcen=FALSE,cintv=0,method="sp",nem=10,nim
           }
         }
         theta[k,]=fit[[1]]
-
+#     }
         if(iter>nstep){stepsize=1}
         theta[k,]=thetaold+stepsize*(theta[k,]-thetaold)
 
@@ -115,22 +101,8 @@ mcem=function(dat=dat,miscode=c(-9),intvcen=FALSE,cintv=0,method="sp",nem=10,nim
 
         pred=cprob(y=base[[2]],x=subx,parm=theta[k,],logF=base[[3]])
 
-        imp=array(0,c(length(misset),nimpute))
         for(j in 1:length(misset)){
-          #if interval censoring
-          if(intvcen==TRUE){# for censoring and/or mixed censoring and missing
-            ysubset=c(cintv[j,k,1]:cintv[j,k,2])
-            predy=base[[2]][ysubset]
-            predprob=pred[[1]][ysubset,j]/sum(pred[[1]][ysubset,j])
-            imp[j,]=sample(x=predy,prob=predprob,size=nimpute,replace=TRUE)
-          }else{ #for purely missing
-            imp[j,]=sample(x=base[[2]],prob=pred[[1]][,j],size=nimpute,replace=TRUE)
-          }
-        }
-        for(ni in 1:nimpute){
-          dstart=(ni-1)*n+1
-          dend=ni*n
-          impdat[(ni-1)*n+misset,k]=imp[,ni]
+          impdat[c(0:(nimpute-1))*n+misset[j],k]=sample(x=base[[2]],prob=pred[[1]][,j],size=nimpute,replace=TRUE)
         }
       }
     }

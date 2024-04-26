@@ -22,6 +22,8 @@ Collate:
     'cdimpute.R'
     'mdimpute.R'
     'mcem.R'
+    'gmcem.R'
+    'insertloc.R'
     'draw.R'
     'pmlkh.R'
     'pmlkhfix.R'
