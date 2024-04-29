@@ -28,6 +28,8 @@
 #'
 #' @return  1. parameter estimate
 #'          2. one copy of the imputed data
+#'          3. history of parameter estimates
+#'          4. history of variance estimates
 #'
 #' @references Chen, H.Y. (2022). Semiparametric Odds Ratio Model and its Application. CRC press.
 #'
@@ -84,7 +86,9 @@ gmcem=function(civ,method="sp",nem=10,nimpute=1,stepsize=0.5,nstep=20){
 
   #3. Get the conditional frequencies and impute using random draws.
   stheta=array(0,c(nem,p,p-1))
+  vstheta=array(0,c(nem,p,p-1,p-1))
   theta=array(0,c(p,p-1))
+  vtheta=array(0,c(p,p-1,p-1))
   for(iter in 1:nem){
     print(c(iter,nem))
     for(k in 1:p){
@@ -105,7 +109,8 @@ gmcem=function(civ,method="sp",nem=10,nimpute=1,stepsize=0.5,nstep=20){
           }
         }
         theta[k,]=fit[[1]]
-
+        vtheta[k,,]=fit[[2]]
+        
         if(iter>nstep){stepsize=1}
         theta[k,]=thetaold+stepsize*(theta[k,]-thetaold)
 
@@ -145,10 +150,11 @@ gmcem=function(civ,method="sp",nem=10,nimpute=1,stepsize=0.5,nstep=20){
        }
     }
     stheta[iter,,]=theta
+    vstheta[iter,,,]=vtheta
     draw(stheta)
 
   }
 
-  return(list(theta,impdat,stheta))
+  return(list(theta,impdat,stheta,vstheta))
 }
 
