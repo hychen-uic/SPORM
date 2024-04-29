@@ -62,19 +62,16 @@ gmcem=function(civ,method="sp",nem=10,nimpute=1,stepsize=0.5,nstep=20){
       a=table(civ[obsset,k,1])
       a_cat=as.numeric(names(a)) # categories of the observed data
       a_freq=as.numeric(a)       # frequency of each category
-      censet=setdiff(c(1:n),obsset) # censored data locations
-
-      bl=table(civ[censet,k,1])
-      bl_cat=as.numeric(names(bl)) # categories of the low bound
-      civ[censet,k,1]=insertloc(a_cat,bl_cat,method="nearestleft")[[1]]
-              # locations of lower bounds of interval censoring in a_cat
-                    # insert is used to find locations of bl_cat in
-                    # the sequence of a_cat using the method of either
-                    # the nearest right or nearest left.
-      bu=table(civ[censet,k,2])
-      bu_cat=as.numeric(names(bu)) # categories of the upper bound
-      civ[censet,k,2]=insertloc(a_cat,bu_cat,method="nearestright")[[1]] 
-              # locations of upper bounds of interval censoring in a_cat
+      censet=setdiff(c(1:n),obsset) # censored data locations in the sample
+ 
+      civ[censet,k,1]=insertloc(a_cat,civ[censet,k,1],method="nearestleft")[[1]]
+              # Convert lower bound values of censoring intervals into 
+              # locations in the ordered completely observed data values (a_cat)
+              # This conversion makes it easy to sample in the imputation step!!
+      civ[censet,k,2]=insertloc(a_cat,civ[censet,k,2],method="nearestright")[[1]] 
+              # Convert upper bound values of censoring intervals into 
+              # locations in the ordered completely observed data values (a_cat)
+              # This conversion makes it easy to sample in the imputation step!!
 
       for(j in 1:length(censet)){
         tx=a_cat[civ[censet[j],k,1]:civ[censet[j],k,2]]
@@ -124,11 +121,20 @@ gmcem=function(civ,method="sp",nem=10,nimpute=1,stepsize=0.5,nstep=20){
           censet=subset(c(1:n),censor[,k]==0) # subset the locations of missing values
           subx=impdat[censet,setdiff(c(1:p),k)]
           pred=cprob(y=base[[2]],x=subx,parm=theta[k,],logF=base[[3]])
-
+          
+         # print(base[[2]])
           for(j in 1:length(censet)){
-            ysubset=c(civ[censet[j],k,1]:civ[censet[j],k,2])
+            ysubset=c(civ[censet[j],k,1]:civ[censet[j],k,2])  
+           # print(c(j,censet[j],censet[j]))
+          #  print(ysubset)
+            
             predy=base[[2]][ysubset]         # This is also the same as a_cat
-            predprob=pred[[1]][ysubset,j]/sum(pred[[1]][ysubset,j])
+            
+            logprob=pred[[2]][ysubset,j]     # this is the log-probabilities
+            logprob=logprob-rep(max(logprob),length(ysubset))  #To rescale to make it close to 0.
+                                                               #This is necessary to avoid numeric problem.
+            logprob=logprob-rep(log(sum(exp(logprob))),length(ysubset))
+            predprob=exp(logprob)
  
         #  if(length(predy)>1){
             impdat[c(0:(nimpute-1))*n+censet[j],k]=sample(x=predy,prob=predprob,size=nimpute,replace=TRUE)

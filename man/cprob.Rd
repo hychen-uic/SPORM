@@ -18,6 +18,8 @@ cprob(y, x, parm, logF)
 \value{
 \enumerate{
 \item all the predictive probabilities for a given covariate x.
+2. all the log predictive probabilities for a given covariate x.
+This is used for ACCURATE calculation for censoring probabilities
 }
 }
 \description{

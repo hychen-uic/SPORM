@@ -21,10 +21,15 @@
 #'
 
 insertloc=function(seta,setb,method='nearestleft'){
-  # seta is a set of ordered values
-  # setb is another set of ordered values
+  # seta is a set of ordered values from the smallest to the largest
+  # setb is another set, but may not be ordered
   # the function is to locate the nearest seta values for every value in setb
-
+  
+  ord=order(setb)
+  setb=setb[ord]
+  revord=rep(0,length(setb))
+  revord[ord]=c(1:length(setb))
+  
   loc=rep(0,length(setb))
   if(method=="nearestleft"){
     i=1
@@ -61,5 +66,7 @@ insertloc=function(seta,setb,method='nearestleft'){
     }
   }
 
+  loc=loc[revord]
+  
   list(loc)
 }

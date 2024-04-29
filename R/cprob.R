@@ -4,10 +4,12 @@
 #' @param x a vector of covariates.
 #' @param parm  a vector (or a matrix) of the OR parameters.
 #' @param logF logarithm (to keep from treating small probability as 0) of baseline probabilities for all possible y values
-#'
+#'                              
 #' @details This function estimates the predictive probabilities for
 #'               given parameters theta and baseline function
 #' @return 1. all the predictive probabilities for a given covariate x.
+#'         2. all the log predictive probabilities for a given covariate x.
+#'            This is used for ACCURATE calculation for censoring probabilities
 #'
 #' @references Chen, H.Y. (2015). A note ogence of an iterative algorithm for semiparametric odds ratio models.
 #'                          Biomatrika, 102, 747-751.
@@ -57,8 +59,9 @@ cprob=function(y,x,parm,logF){
   logpred=logpred-rep(1,n)%*%t(log(apply(exp(logpred),2,sum)))
                         # log(eta(y,x) dF(y)/int eta(y,x) dF(y)). pred is a nxnmiss matrix
   pred=exp(logpred)     # the predictive probabilities for each missing value
-
-  return(list(pred))
+  
+       # output logpred for censoring calculation
+  return(list(pred,logpred))
 }
 
 
