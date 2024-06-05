@@ -35,6 +35,8 @@ method='pm' for permutation likelihood approach}
 \enumerate{
 \item parameter estimate
 2. one copy of the imputed data
+3. history of parameter estimates
+4. history of variance estimates
 }
 }
 \description{

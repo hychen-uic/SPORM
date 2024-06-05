@@ -136,6 +136,7 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
       return(list(F[1:k],y[ind[1:k],],logF[1:k],ind[1:k])) # aggregated and ordered
     }
   }else{
+    F=exp(logF)
     return(list(F,y,logF)) # nonaggregated and nonordered
   }
 
