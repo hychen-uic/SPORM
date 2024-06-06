@@ -111,7 +111,7 @@ baseline=function(y,x,parm,method="weight",fagg=TRUE){
       ord=do.call(order, as.data.frame(y))
       #F=F[ord]
       logF=logF[ord]
-      y=y[ord,]
+      y=as.matrix(y[ord,])
 
       k=1
       for(i in 2:n){
