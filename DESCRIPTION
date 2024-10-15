@@ -16,6 +16,7 @@ Roxygen: list(markdown = TRUE)
 Collate: 
     'amcem.R'
     'bmcem.R'
+    'btimpute.R'
     'SPORM-package.R'
     'example.R'
     'bone.R'
